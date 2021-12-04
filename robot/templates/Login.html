@@ -1,0 +1,238 @@
+{% extends "base.html" %}
+{% block title %}登入畫面{% endblock %}
+
+
+
+{% block css %}
+<style>
+    #photo{
+        width: 100%;
+        height: 320px;
+        object-fit: cover;
+    }
+
+    #bg{
+        position: fixed;
+        left:0;
+        top: 0;
+        height:100%;
+        width: 100%;
+        background: rgba(0,0,0, .4);
+    }
+
+
+
+    #alertbox{
+        margin: 200px auto 0;
+        text-align:center;
+        padding-top: 25px;
+        width: 300px;
+        height: 85px;
+        background: #FFF;
+        border-radius: 3px;
+        box-shadow: 2px 2px rgba(0,0,0, .3);
+    }
+    .v13_58 {
+        color: rgba(0, 0, 0, 1);
+        font-family: Roboto;
+        font-weight: Regular;
+        font-size: 50px;
+        opacity: 1;
+        top: 0px;
+        left:3px;
+            
+    }
+
+    .v13_23 {
+        color: rgba(0, 0, 0, 1);
+        font-family: Roboto;
+        font-weight: Regular;
+        font-size: 64px;
+        opacity: 1;
+        text-align: left;
+    }
+    .button3 {
+    display: inline-block;
+    text-align: center;
+    vertical-align: middle;
+    padding: 10px 22px;
+    border: 2px solid #780000;
+    border-radius: 16px;
+    background: #fa7d7d;
+    background: -webkit-gradient(linear, left top, left bottom, from(#fa7d7d), to(#e84343));
+    background: -moz-linear-gradient(top, #fa7d7d, #e84343);
+    background: linear-gradient(to bottom, #fa7d7d, #e84343);
+    -webkit-box-shadow: #ff5959 0px 0px 7px 0px;
+    -moz-box-shadow: #ff5959 0px 0px 7px 0px;
+    box-shadow: #ff5959 0px 0px 7px 0px;
+    text-shadow: #591717 1px 1px 1px;
+    font: normal normal bold 28px arial;
+    color: #ffffff;
+    text-decoration: none;
+}
+.button3:hover{
+    background-color: #000;
+    color: rgb(235, 235, 235);
+}
+
+.button3:active {
+    background-color: #3e8e41;
+    box-shadow: 0 5px rgb(148, 148, 148);
+    transform: translateY(4px);
+}
+.button3:focus {
+    border: 2px solid #ff0000;
+    background: #ff9696;
+    background: -webkit-gradient(linear, left top, left bottom, from(#ff9696), to(#ff5050));
+    background: -moz-linear-gradient(top, #ff9696, #ff5050);
+    background: linear-gradient(to bottom, #ff9696, #ff5050);
+    color: #ffffff;
+    text-decoration: none;
+}
+.button3:active {
+    background: #964b4b;
+    background: -webkit-gradient(linear, left top, left bottom, from(#964b4b), to(#e84343));
+    background: -moz-linear-gradient(top, #964b4b, #e84343);
+    background: linear-gradient(to bottom, #964b4b, #e84343);
+}
+.button3:after{
+    content:  "\0000a0";
+    display: inline-block;
+    height: 24px;
+    width: 24px;
+    line-height: 24px;
+    margin: 0 -4px -6px 4px;
+    position: relative;
+    top: 0px;
+    left: 3px;
+    background: url("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABgAAAAYCAYAAADgdz34AAAACXBIWXMAAA7EAAAOxAGVKw4bAAAEGklEQVRIibWVwW8bRRTGf2/Wu7Gd9cZqnaZN0oBaiQOES6k4IODICaRyrEq55YZQERJIERw5wLkVXEEIQUH9A5KCqhxQwUUCKVJQhEIFVZomlevYzmayuzPDwZvUsR0OSOzoaWffzvu+ee/NewP/8yP/xehBswMQAhFQBZoT1XB92NpC78ffm42ZIAhmgGNALZdxoCZQc3BMHuuLQJBjvA98AjA/Pz+9uLi4Xq/X7QABcE2EV49y8ih3BYKpqSnm5uYupGn66crKyjNAA0D1LdRC/+CwyGNRuYgwevny5bcLhcK3q6urH3U6ncbQEIGLpW+bSZKSpMmhbewvSbOM6tgYt24uvFGpVCYbjcYXW1tbn/Xa94eoJSK02h0EUEqRZRnF4gjGGKxzhxZ7SrGy/BtLt36Y9n3/u3q9Pre0tJT9G0FTgLGocqBI0xQceMrDWIO1Fme7RKurv3Pj+jfUxmu/Xrt69WKj0cj68A7nAGe3RAQFOGt5sLmJ1po0TXDOokRwzoHA3T//4Mb1rymNhlx59z07DHyAwBq7oUQQEQqex+TEBKWRERDBGANAqTjC5v11fvnpNmE0xvwHH+L7hUnnnBpGcChExmT3wCF5prvxL1ICtttt0jTl7toaX335OZ5X4K0r7yACnlInrHUzzrl7InJ0Dqy1f+EcSinSLGO71WYsqhD4PtWowsbGfR5ubjA7+ywXL11Ccs88JcrinldI4pzbEBE7lADnHjrnmiJSDXyfidpxADpxjLWWmwsLRFHEaxdeJ97VCJCkKaXjRQSeA9aAOMcYJBBBg1tTIucQaLXaxLuaUqmIAC+8+BKe57Ebx1TCEN/3CctlcqyngZNAJ5dsIMlnnpgBa5eVdH9UowqTE+NUowpKKU6dOkkYhlhreNR8xPb2Nrta53UjTwEncjnm8prprwMyY+qIvIlzJGmGCDjn8DxFWC5TjSqAoPUuaZqiBHSSYK2dVsrrbZJNIBk4Wsne3m2cIzMGvafRWlMoeFhr8x7UPcblUpkoivADn8wYkjQpG2tPA2W6bbw81ANjzLIxphn4fjXw/cf5yYcxFr23d1AXAhQ8D08pnLVPolQ9xw2cc4MEp6endGdn52cR/5VefRD4bHc6FJSiVCried4BAXTDaK09A8TAQXccWn1Zmn3f36bLxRGqlQrh6Cie8g70++BJkpAkyUyz1dbG2FZONOgBZ8/TaDYXwnD0Y1FdfmsMO3Fsd3Z2tNZaG2M6SikNEislGogDP+iUyuVllFrNjNn0PBWLSB/B2fMAweKPd5ovn9tdStO0lWVZ0znXDMNKa7xWa9dqNR34vs7DkAE2nyfAHWAdsPuFNvQWdM7NAmd6DHUOlvRI1qPbn7ek78YaIMgLpJbvbN/Q9gk9b/pBe59/ANcj6QVYIme8AAAAAElFTkSuQmCC") no-repeat left center transparent;
+    background-size: 100% 100%;
+}
+.v38_13 {
+        width: 569px;
+        color: rgba(0, 0, 0, 1);
+        font-family: Roboto;
+        font-weight: Regular;
+        font-size: 50px;
+        opacity: 1;
+        text-align: left;
+    }
+</style>
+{% endblock%}
+
+
+{% block content %}
+
+
+
+{% if request.user.is_authenticated %}
+    <p>管理者模式</p>
+{% endif %}
+
+<nav class="navbar navbar-expand-md" style="border-bottom:solid 20px;border-color:#00BB00;margin-top:20px;">
+    <div class="navbar-collapse collapse w-100 order-1 order-md-0 dual-collapse2">
+        <ul class="navbar-nav mr-auto">
+            <li class="nav-item active">
+                <span class="v13_58" ><img src="/media/image/home.png" width="60" height="60">登入畫面</span>
+            </li>
+            
+        </ul>
+    </div>
+    
+    <div class="navbar-collapse collapse w-100 order-3 dual-collapse2">
+        <ul class="navbar-nav ml-auto">
+            <span class="v13_23"><img src="/media/image/user.png" width="60" height="65">
+                <a href='/Signup/'><button class="button3">註冊</button></a>
+            </span>
+        </ul>
+    </div>
+</nav>
+<span class="v38_13">點擊頭像,即可登入</span>
+<div class="row">
+    {% for userdata in userdatas %}
+    <div class="col-9 col-md-4  ">
+        <div class="card " style="width:100%;">
+            <a href = '/index/{{ userdata.pk }}'>
+                <img class="card-img-top" src="{{ userdata.image.url }}" alt="Card image" id="photo">
+            </a>
+            <div class="card-body">
+                <h4 class="card-title">{{ userdata.name }}</h4>
+                <p class="card-text">生日:{{ userdata.year }}年{{ userdata.month }}月{{ userdata.day }}日</p>
+                {% if request.user.is_authenticated %}
+                    
+                    <!-- Button trigger modal -->
+                    <button id="showWarringBox">刪除{{userdata.pk}}</button>
+                    
+
+
+                {% endif %}
+            </div>
+        </div>
+        <br>
+    </div>
+    {% endfor %}
+</div>
+
+
+{% endblock %}
+
+{% block javascript %} 
+<script>
+    
+    $("div #showWarringBox").click(function(){
+        swal({
+    title: "確定要刪除使用者?",
+    text: "刪了就不見了喔",
+    icon: "warning",
+    buttons: true,
+    dangerMode: true,
+    })
+.then((willDelete) => {
+    if (willDelete) {
+        swal("使用者已刪除", {
+        icon: "success",
+        });
+        var dataPk = $(this).text()
+        dataPk = dataPk.replace("刪除", " ")
+        $.ajax({
+                url:"/",
+                traditional: true,
+                type:'GET',
+                //dataType:'json',
+                data:{
+                    "dataPk" : dataPk,
+                },
+                success: function(){
+                    
+                    location.reload();
+                }
+        })
+        console.log(dataPk)
+    } else {
+        
+        swal("該使用者沒被刪除");
+    }
+});
+    })
+    
+    
+
+
+    /*
+    var dataPk = $(this).text()
+            dataPk = dataPk.replace("刪除", " ")
+    $.ajax({
+                url:"/",
+                traditional: true,
+                type:'GET',
+                //dataType:'json',
+                data:{
+                    "dataPk" : dataPk,
+                },
+                success: function(){
+                    $("#bg").fadeOut(300);
+                    location.reload();
+                }
+            })*/
+</script>
+{% endblock %}

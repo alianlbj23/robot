@@ -1,0 +1,136 @@
+{% extends "base.html" %}
+{% block title %}結算畫面{% endblock %}
+{% block javascript %} 
+<script>
+    $(document).ready(function(){
+        $(".btn1").click(function(){
+            $(this).css('display', 'none');
+            $("div").removeClass("change").addClass("fadein")
+        });
+    });
+</script>
+{% endblock %}
+
+{% block css %}
+<style>
+    .v13_58 {
+        color: rgba(0, 0, 0, 1);
+        font-family: Roboto;
+        font-weight: Regular;
+        font-size: 50px;
+        opacity: 1;
+        top: 0px;
+        left:3px;
+        
+    }
+    #correct{
+        text-align:left;
+        font-family:fantasy;
+        font-size:200%;
+        color:green;
+    }
+    #erro{
+        text-align:left;
+        font-family:fantasy;
+        font-size:200%;
+        color:red;
+    }
+    #ans{
+        text-align:center;
+        font-family:fantasy;
+        font-size:400%;
+        color:orange;
+    }
+    #headtext{
+        text-align:center;
+        font-family:fantasy;
+        font-size:400%;
+        color:black;
+    }
+    .button {
+        width: 350px;
+    height: 50px;
+    display: block;
+    text-align: center;
+    cursor: pointer;
+    line-height: 40px;
+    color: #fff;
+    background-color: #000;
+    transition: all .3s linear;
+    font: bold  normal normal 35px arial;
+    }
+    .button:hover {
+        background-color: #666;
+    }
+    .change{
+        display:none;
+    }
+    .fadein{
+        opacity: 1;
+        padding:0px;
+        animation-name: fadeInOpacity;
+        animation-iteration-count: 1;
+        animation-timing-function: ease-in;
+        animation-duration: 0.5s;
+    }
+    @keyframes fadeInOpacity {
+    0% {
+        opacity: 0;
+    }
+    100% {
+        opacity: 1;
+    }
+    
+</style>
+{% endblock %}
+
+{% block content %}
+
+
+<div style="margin:20px">
+    <button class="btn1 button">結算畫面</button>
+
+    <div class="change">
+        <nav class="navbar navbar-expand-md" style="border-bottom:solid 20px;border-color:#00BB00;margin-top:20px;">
+            <div class="navbar-collapse collapse w-100 order-1 order-md-0 dual-collapse2">
+                <ul class="navbar-nav mr-auto">
+                    <li class="nav-item active">
+                        <span class="v13_58" ><img src="/media/image/finish.png" width="60" height="60">結算畫面</span>
+                    </li>
+                    
+                </ul>
+            </div>
+        </nav>
+        {% if gameMod == "SortTermMemoryGame"%}
+            <br>
+            {% for i in ans %}
+                {% if i %}
+                    <p id="correct">答對</p>
+                {% else %}
+                    <p id="erro">答錯</p>
+                {% endif %}
+            {% endfor %}
+            <p id="headtext">遊玩時間:{{ sorttermmemory.add_time }}</p>
+            <p id="headtext">共遊玩次數:{{ count }}</p>
+            <p id="ans">總分{{ sorttermmemory.correct_rate }}</p>
+            <p id="ans">共花{{ sorttermmemory.costTime }}秒!</p>
+            
+            
+        {% endif %}
+
+        {% if gameMod == "AttentionGame"%}
+            <p id="headtext">遊玩時間:{{ attention.add_time }}</p>
+            <p id="headtext">共遊玩次數:{{ count }}</p>
+            <p id="ans">總分{{attention.correct_rate}}分</p>
+        {% endif %}
+
+        {% if gameMod == "OrientationGame"%}
+            <p id="headtext">遊玩時間:{{ OrientationGame.add_time }}</p>
+            <p id="headtext">共遊玩次數:{{ count }}</p>
+            <p id="ans">總分{{OrientationGame.correct_rate}}分</p>
+        {% endif %}
+        <br>
+        <a href="/index/{{ pk }}/"><button class="button" style="margin:auto">回首頁</button></a>
+    </div>
+</div>
+{% endblock %}

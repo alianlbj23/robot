@@ -1,0 +1,462 @@
+{% extends "base.html" %}
+{% block title %}定向力遊戲{% endblock %}
+
+
+    
+  <center><h3>定向力遊戲</h3></center>
+        
+  
+
+{% block css %}
+<style>
+@import url('https://fonts.googleapis.com/css?family=Montserrat');
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+body {
+  font-family: 'Montserrat', sans-serif;
+  background-color: #eee;
+  color: #111;
+}
+.after{
+        opacity: 0;
+        display: none;
+    }
+.button {
+        background-color: #0088ff; 
+        border: none;
+        color: white;
+        padding: 15px 32px;
+        text-align: center;
+        text-decoration: none;
+        display: inline-block;
+        font-size: 20px;
+        margin: 4px 2px;
+        cursor: pointer;
+        -webkit-transition-duration: 0.4s; /* Safari */
+        transition-duration: 0.4s;;
+    }
+    .button:hover {
+        box-shadow: 0 12px 16px 0 rgba(0,0,0,0.24),0 17px 50px 0 rgba(0,0,0,0.19);
+    }
+#countdown2{
+        text-align:center;
+        font-family:fantasy;
+        font-size:700%;
+        color: green;
+    }
+    #countdown{
+        text-align:center;
+        font-family:fantasy;
+        font-size:700%;
+        color: green;
+    }
+.score {
+  font-family: monospace;
+  text-align: center;
+  font-size: 2rem;
+  font-weight: bold;
+  letter-spacing: 0.25rem;
+  margin: 1rem;
+  position: relative;
+  transition: opacity 0.2s;
+}
+#play-again-btn {
+  position: absolute;
+  top: -0.5rem;
+  left: 50%;
+  margin-left: -50px;
+  font-size: 1rem;
+  font-weight: bold;
+  color: #fff;
+  background-color: #111;
+	border: 5px double #fff; 
+	border-radius: 14px;
+	padding: 8px 10px;  
+  outline: none;
+  letter-spacing: .05em;
+  cursor: pointer;
+  display: none;
+  opacity: 0;
+  transition: opacity 0.5s, transform 0.5s, background-color 0.2s;
+}
+#play-again-btn:hover {
+  background-color: #333;
+}
+#play-again-btn:active {
+  background-color: #555;
+}
+#play-again-btn.play-again-btn-entrance {
+  opacity: 1;
+  transform: translateX(6rem);
+}
+.draggable-items {
+  display: flex;
+  justify-content: center;
+  margin: 1rem 1rem 1.5rem 1rem;
+  transition: opacity 0.5s;
+}
+.draggable {
+  height: 5rem;
+  width: 5rem;
+  display: flex;
+  float:left;
+  align-items: center;
+  justify-content: center;
+  font-size: 4rem;
+  font-weight: bold;
+  margin: 0rem 0.5rem;
+  cursor: move;
+  transition: opacity 0.2s;
+}
+.draggable:hover {
+  opacity: 0.5;
+}
+.matching-pairs {
+  transition: opacity 0.5s;
+}
+.matching-pair {
+  height: 6rem;
+  width: 22rem;
+  margin: 1rem auto;
+  display: flex;
+  justify-content: space-between;
+}
+.matching-pair span {
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  user-select: none;
+}
+.label {
+  width: 15rem;
+  font-size: 2rem;
+}
+.exemple{
+  width: 6rem;
+  font-size: 4rem;
+  background-color: #fff;
+  border: 3px solid #111;
+  transition: 0.2s;
+}
+.droppable {
+  width: 6rem;
+  font-size: 4rem;
+  background-color: #fff;
+  border: 3px dashed #111;
+  transition: 0.2s;
+}
+.droppable-hover {
+  background-color: #bee3f0;
+  transform: scale(1.1);
+}
+.dropped {
+  border-style: solid;
+}
+.dragged {
+  user-select: none;
+  opacity: 0.1;
+  cursor: default;
+}
+.draggable.dragged:hover {
+  opacity: 0.1;
+}
+.frame, .frame0{
+  display:flex;
+  flex-wrap: wrap;
+  flex-direction: column;
+  height: 300px;
+  border: 1px;
+  justify-content: center;
+  align-content: center;
+  border: 1px solid red;
+  }
+
+@media (max-width: 600px) {
+  html { font-size: 14px; }
+  #play-again-btn { top: -0.4rem; }
+  #play-again-btn.play-again-btn-entrance { transform: translateX(7rem); }
+}
+.fadein{
+        opacity: 1;
+        animation-name: fadeInOpacity;
+        animation-iteration-count: 1;
+        animation-timing-function: ease-in;
+        animation-duration: 0.5s;
+    }
+    @keyframes fadeInOpacity {
+        0% {
+            opacity: 0;
+        }
+        100% {
+            opacity: 1;
+        }
+    }
+
+      .prepareButton {
+    display: inline-block;
+    text-align: center;
+    vertical-align: middle;
+    padding: 14px 19px;
+    border: 3px solid #2e0606;
+    border-radius: 62px;
+    background: #f2f2f2;
+    background: -webkit-gradient(linear, left top, left bottom, from(#f2f2f2), to(#fafafa));
+    background: -moz-linear-gradient(top, #f2f2f2, #fafafa);
+    background: linear-gradient(to bottom, #f2f2f2, #fafafa);
+    -webkit-box-shadow: #fafafa 0px 0px 40px 0px;
+    -moz-box-shadow: #fafafa 0px 0px 40px 0px;
+    box-shadow: #fafafa 0px 0px 40px 0px;
+    text-shadow: #591717 1px 1px 1px;
+    font: normal normal normal 28px arial;
+    color: #0d0d0d;
+    text-decoration: none;
+}
+.prepareButton:hover{
+    background-color: #000;
+    color: rgb(39, 39, 39);
+}
+
+.prepareButton:active {
+  background-color: #3e8e41;
+  box-shadow: 0 5px rgb(148, 148, 148);
+  transform: translateY(4px);
+}
+.prepareButton:focus {
+    border: 3px solid #3b3b3b;
+    background: #ffffff;
+    background: -webkit-gradient(linear, left top, left bottom, from(#ffffff), to(#ffffff));
+    background: -moz-linear-gradient(top, #ffffff, #ffffff);
+    background: linear-gradient(to bottom, #ffffff, #ffffff);
+    color: #0d0d0d;
+    text-decoration: none;
+}
+.prepareButton:active {
+    background: #919191;
+    background: -webkit-gradient(linear, left top, left bottom, from(#919191), to(#fafafa));
+    background: -moz-linear-gradient(top, #919191, #fafafa);
+    background: linear-gradient(to bottom, #919191, #fafafa);
+}
+.prepareButton:after{
+    content:  "\0000a0";
+    display: inline-block;
+    height: 24px;
+    width: 24px;
+    line-height: 24px;
+    margin: 0 -4px -6px 4px;
+    position: relative;
+    top: 0px;
+    left: 0px;
+    background: url("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABgAAAAYCAYAAADgdz34AAAACXBIWXMAAA7EAAAOxAGVKw4bAAABF0lEQVRIibXWQWrCQBjF8V9FuugJXPQS3ZTiWqQn6HEEN917DilFvIMHKd2WLooLpWAXiTDqTGYS0wcDYSZ5/+97CZmBEdbY4dBybHEno3UH42LAENP6+hObXDVn2uM3Mj/BI14F1Sxbmqc0UXV2wHzQk+lRU7w7i62vDib4CfzmGPQFCGM5YBYuXguYuqz8RNcAkrGUAJ5jN5+ZJ2PJAWb13CIBycUyxks9LgD3+A7mF5HKc7Esg/VoB08RyEB5LFnAsc0Q8hapPKUiQAzS+LV0AXAZV1PlnQDHTr4KzU8Aw8IHNnhQ/dJbqRQAH23NaX5RvejfATeqzf5Wty0zpbHqj7CHle6bfm6sqI4tK92OLamxqz1Hf7umx5GpaJqCAAAAAElFTkSuQmCC") no-repeat left center transparent;
+    background-size: 100% 100%;
+}
+.endButton {
+  display: inline-block;
+  text-align: center;
+  vertical-align: middle;
+  padding: 14px 20px;
+  border: 5px solid #3d3d3d;
+  border-radius: 40px;
+  background: #ffffff;
+  background: -webkit-gradient(linear, left top, left bottom, from(#ffffff), to(#c7c7c7));
+  background: -moz-linear-gradient(top, #ffffff, #c7c7c7);
+  background: linear-gradient(to bottom, #ffffff, #c7c7c7);
+  -webkit-box-shadow: #cfcfcf 0px 0px 40px 0px;
+  -moz-box-shadow: #cfcfcf 0px 0px 40px 0px;
+  box-shadow: #cfcfcf 0px 0px 40px 0px;
+  text-shadow: #591717 1px 1px 1px;
+  font: normal normal normal 28px arial;
+  color: #4a4a4a;
+  text-decoration: none;
+}
+.endButton:hover{
+  background-color: #000;
+  color: #000;
+}
+
+.endButton:active {
+background-color: #3e8e41;
+box-shadow: 0 5px rgb(148, 148, 148);
+transform: translateY(4px);
+}
+.endButton:focus {
+  border: 7px solid #626262;
+  background: #ffffff;
+  background: -webkit-gradient(linear, left top, left bottom, from(#ffffff), to(#efefef));
+  background: -moz-linear-gradient(top, #ffffff, #efefef);
+  background: linear-gradient(to bottom, #ffffff, #efefef);
+  color: #4a4a4a;
+  text-decoration: none;
+}
+.endButton:active {
+  background: #999999;
+  background: -webkit-gradient(linear, left top, left bottom, from(#999999), to(#c7c7c7));
+  background: -moz-linear-gradient(top, #999999, #c7c7c7);
+  background: linear-gradient(to bottom, #999999, #c7c7c7);
+}
+.endButton:after{
+  content:  "\0000a0";
+  display: inline-block;
+  height: 32px;
+  width: 32px;
+  line-height: 24px;
+  margin: 0 -4px -6px 4px;
+  position: relative;
+  top: -3px;
+  left: 1px;
+  background: url("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABgAAAAYCAYAAADgdz34AAAACXBIWXMAAA7EAAAOxAGVKw4bAAABMklEQVRIie3SsSvFURQH8A9JMkhCMhksyqYkZcNoeQyS1eD/8AcYMUoxiDIhizfI8JCBEmVAipAigzDc+/LSe7/ee4nlfet0zz3ndr/3e76XCv4bVXlq05jAO15xj1tc4xLHcf0ohqA6T20c/XjCATrQhxasYRHNOedb0V4KQRb7cd2NcYd5NGIFG9jBBYbLIbjCSLz4DgOYwxYecO57XAWRRPCEMXTFmEEGpzGvjzFZLsEb9uKlGSwIn6In5pmcKIiahN678JuG4j6rYBGbwsjEM3XlKKgVRvTTg5aYZ+upJAVJBE1JLysWSSPqFL5iCr04waBg/pzgBawKaotGGp84xCOWMIpuNGAq9tMxXmK/ZAWzWI8vzsUyntGGMxzhphwFv4IkkysEyG/ytmBiBX+DL2vKSsQU4cklAAAAAElFTkSuQmCC") no-repeat left center transparent;
+  background-size: 100% 100%;
+}
+</style>
+{% endblock %}
+
+
+
+{% block content %}
+  
+  
+  <div class="frame0">
+    {% for color in randomColor %}
+      <div class="exemple" data-draggable-id=color style="background-color:{{color}}"> &nbsp;</div>
+    {% endfor %}
+  </div>
+  <button class="prepareButton"id="readybtn" style="display:none;">準備好了</button>
+  <section class="after draggable-elements">
+    <i class="fas fa-cat draggable" draggable="true" style="color: #ff6384;" id="#ff6384"></i>
+    <i class="fas fa-dog draggable" draggable="true" style="color: #36a2eb;" id="#36a2eb"></i> 
+    <i class="fas fa-dove draggable" draggable="true" style="color: #ffce56;" id="#ffce56"></i> 
+    <i class="fas fa-fish draggable" draggable="true" style="color: #9966ff;" id="#9966ff"></i> 
+  </section>
+  <br><br><br><br><br>
+  <div class="after">
+  <section class="droppable-elements">
+    <div class="frame">
+      {% for color in randomColor %}
+        <div class="droppable" data-draggable-id={{color}}> &nbsp;</div>
+      {% endfor %}
+    </div>
+  </section>
+  </div>
+  <a href="/settlement/{{ pk }}/OrientationGame/" ><button style="display:none" class="endButton" >送出</button></a>
+  <p id="countdown2">5</p>
+  <p id="countdown" class="after">0</p>
+{% endblock %}
+
+{% block javascript %} 
+<script>
+$(document).ready(function(){
+  window.setInterval(countdown2, 1000);
+    timer2 = document.getElementById("countdown2");
+    function countdown2(){
+        timer2.innerHTML = timer2.innerHTML - 1;
+    }
+    setTimeout(function(){
+        $(".exemple").css("display", 'none');
+        $("")
+        clearInterval(timer2);
+        $("#countdown2").css("display", 'none');
+        $(".frame0").css("display", "none")
+        $("#readybtn").css("display", "").addClass("fadein")
+    }, 5000);//讓三張圖片出現五秒
+    $("#readybtn").click(function(){
+            $(".after").removeClass("after").addClass("fadein")
+            $(this).css("display", "none");
+            window.setInterval(countdown, 1000);
+            timer = document.getElementById("countdown");
+    });
+    function countdown(){
+            timer.innerHTML = timer.innerHTML - (-1);
+    }
+    
+  const draggableElements = document.querySelectorAll(".draggable");
+  const droppableElements = document.querySelectorAll(".droppable")
+
+  draggableElements.forEach(elem => {
+    elem.addEventListener("dragstart", dragStart);
+  });
+  
+  droppableElements.forEach(elem => {
+    elem.addEventListener("dragenter", dragEnter);
+    elem.addEventListener("dragover", dragOver);
+    elem.addEventListener("dragleave", dragLeave);
+    elem.addEventListener("drop", drop);
+  });
+  
+  function dragStart(event) {
+    event.dataTransfer.setData("text", event.target.id)
+  }
+
+  function dragOver(event) {
+    if(!event.target.classList.contains("dropped")){
+      event.preventDefault();
+    }
+  }
+
+  function dragLeave(event) {
+    if(!event.target.classList.contains("dropped")){
+      event.target.classList.remove("droppable-hover");
+    }
+  }
+  var correct = 0 //答對題數
+  var dropCount = 0 //觀察圖片是否都填入
+  function drop(event) {
+    event.preventDefault();
+    event.target.classList.remove("droppable-hover");
+    const draggableElementData = event.dataTransfer.getData("text")
+    const droppableElementData = event.target.getAttribute("data-draggable-id")
+    dropCount += 1
+    if(draggableElementData === droppableElementData) {
+      console.log("ok")
+      correct += 1
+    }
+    console.log("1"+draggableElementData)
+    console.log("2"+droppableElementData)
+      event.target.classList.add("dropped")
+      const draggableElement = document.getElementById(draggableElementData);
+      //console.log(draggableElementData)
+      event.target.style.backgroundColor = draggableElement.style.color;
+      draggableElement.classList.add("dragged");
+      draggableElement.setAttribute("draggable", "false");
+      event.target.insertAdjacentHTML("afterbegin", '<i class="fas fa-$(draggableElementData}"></i>');
+    if (dropCount == 4){
+      $(".endButton").css("display", "")
+    }
+  }
+
+  function dragEnter(event) {
+    if(!event.target.classList.contains("dropped")){
+      event.target.classList.add("droppable-hover");
+    }
+    
+  }
+  
+  
+    $(".endButton").click(function(){
+      count_number = $("#countdown").text();
+      $.ajax({
+        url:"/OrientationAjax/{{ pk }}/",
+        traditional: true,
+        type:'GET',
+        //dataType:'json',
+        data:{
+          "correct": correct,
+          "count_number":count_number,
+        },
+        success: function(){
+          
+        }
+      })
+    })
+
+})
+  
+</script>
+
+
+{% endblock %}
+

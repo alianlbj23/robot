@@ -1,0 +1,263 @@
+
+{% extends 'base.html' %}
+{% block title %} SignUp {% endblock %}
+
+{% block css %}
+<style>
+    table{
+        font-size:150%;
+        
+    }
+    
+#cameraFileInput {
+  display: none;
+}
+
+#pictureFromCamera, #capture{
+  width: 70%;
+  height: auto;
+  margin-top: 16px;
+  align:center;
+}
+
+.btn {
+  display: inline-block;
+  background-color: #00b531;
+  color: white;
+  padding: 8px 12px;
+  border-radius: 20px;
+  font-size: 20px;
+  cursor: pointer;
+  width:10%;
+  height:10%;
+
+}
+
+.btn:hover {
+  filter: brightness(0.9);
+}
+.v13_58 {
+        color: rgba(0, 0, 0, 1);
+        font-family: Roboto;
+        font-weight: Regular;
+        font-size: 50px;
+        opacity: 1;
+        top: 0px;
+        left:3px;
+        
+    }
+.button4 {
+    cursor: pointer;
+    display: inline-block;
+    text-align: center;
+    vertical-align: middle;
+    padding: 10px 22px;
+    border: 2px solid #3d3d3d;
+    border-radius: 27px;
+    background: #fafaff;
+    background: -webkit-gradient(linear, left top, left bottom, from(#fafaff), to(#35d46d));
+    background: -moz-linear-gradient(top, #fafaff, #35d46d);
+    background: linear-gradient(to bottom, #fafaff, #35d46d);
+    -webkit-box-shadow: #4d8f6c 0px 0px 4px 0px;
+    -moz-box-shadow: #4d8f6c 0px 0px 4px 0px;
+    box-shadow: #4d8f6c 0px 0px 4px 0px;
+    text-shadow: #591717 1px 1px 1px;
+    font: normal normal bold 28px arial;
+    color: #fafafa;
+    text-decoration: none;
+}
+.button4:hover{
+    background-color: #000;
+    color: rgb(235, 235, 235);
+}
+
+.button4:active {
+  background-color: #3e8e41;
+  box-shadow: 0 5px rgb(148, 148, 148);
+  transform: translateY(4px);
+}
+.button4:focus {
+    border: 2px solid #626262;
+    background: #ffffff;
+    background: -webkit-gradient(linear, left top, left bottom, from(#ffffff), to(#40fe83));
+    background: -moz-linear-gradient(top, #ffffff, #40fe83);
+    background: linear-gradient(to bottom, #ffffff, #40fe83);
+    color: #fafafa;
+    text-decoration: none;
+}
+.button4:active {
+    background: #969699;
+    background: -webkit-gradient(linear, left top, left bottom, from(#969699), to(#35d46d));
+    background: -moz-linear-gradient(top, #969699, #35d46d);
+    background: linear-gradient(to bottom, #969699, #35d46d);
+}
+.button4:before{
+    content:  "\0000a0";
+    display: inline-block;
+    height: 24px;
+    width: 24px;
+    line-height: 24px;
+    margin: 0 4px -6px -4px;
+    position: relative;
+    top: 0px;
+    left: -1px;
+    background: url("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABgAAAAYCAYAAADgdz34AAAACXBIWXMAAA7EAAAOxAGVKw4bAAAA6ElEQVRIidWUPQrCQBCFP2NMYW0RUll7CkltYR3Qo9hYegzxDHY2FhaSSvAoNhpiMwGRzWR2IUUeLPmZmfd2Z3YG2hEBZ6DuWFfx9cYSqAwCNbAKEbgZyWvg4XuKtQd5s7YuohjYyftYnhWw8dmNYA/M/3+ORL03BFXfB7HR7wVcgKd8L4AcmFqCu4p3AlJHXAocDfGq8YCexkh8ggTuQGLIQAKUIQKFgbxBESLgynsb0jYerQ8mwMcoEANvl0Er4MxIrvpqArmHgOrbVoOSnm9R733w28mZgzwTmxpvnabBs2j443r4Al9v3LBVisGUHAAAAABJRU5ErkJggg==") no-repeat left center transparent;
+    background-size: 100% 100%;
+}
+.button5 {
+    display: inline-block;
+    text-align: center;
+    vertical-align: middle;
+    padding: 10px 22px;
+    border: 2px solid #3d3d3d;
+    border-radius: 27px;
+    background: #fafafa;
+    background: -webkit-gradient(linear, left top, left bottom, from(#fafafa), to(#ededed));
+    background: -moz-linear-gradient(top, #fafafa, #ededed);
+    background: linear-gradient(to bottom, #fafafa, #ededed);
+    -webkit-box-shadow: #171717 0px 0px 2px 0px;
+    -moz-box-shadow: #171717 0px 0px 2px 0px;
+    box-shadow: #171717 0px 0px 2px 0px;
+    text-shadow: #591717 1px 1px 1px;
+    font: normal normal normal 28px arial;
+    color: #0a0a0a;
+    text-decoration: none;
+}
+.button5:hover{
+    background-color: #000;
+    color: rgb(59, 59, 59);
+}
+
+.button5:active {
+  background-color: #3e8e41;
+  box-shadow: 0 5px rgb(148, 148, 148);
+  transform: translateY(4px);
+}
+.button5:focus {
+    border: 2px solid #626262;
+    background: #ffffff;
+    background: -webkit-gradient(linear, left top, left bottom, from(#ffffff), to(#ffffff));
+    background: -moz-linear-gradient(top, #ffffff, #ffffff);
+    background: linear-gradient(to bottom, #ffffff, #ffffff);
+    color: #0a0a0a;
+    text-decoration: none;
+}
+.button5:active {
+    background: #969696;
+    background: -webkit-gradient(linear, left top, left bottom, from(#969696), to(#ededed));
+    background: -moz-linear-gradient(top, #969696, #ededed);
+    background: linear-gradient(to bottom, #969696, #ededed);
+}
+.button5:after{
+    content:  "\0000a0";
+    display: inline-block;
+    height: 24px;
+    width: 24px;
+    line-height: 24px;
+    margin: 0 -4px -6px 4px;
+    position: relative;
+    top: 0px;
+    left: -1px;
+    background: url("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABgAAAAYCAYAAADgdz34AAAACXBIWXMAAA7EAAAOxAGVKw4bAAABh0lEQVRIibXVMUhVYRQH8B/Pi4i8wUlERB4RTRIi4uAQDg4i4vhoampoCJEIaWpxEJKmMBAFRxERcVEcIlpaREJEQyIkRIJw0D2k4dwH+VDve3rff/vu933nf87//L9zuRnJLXv3xiPMNSp4H35jO49ghar1MNaxiFZ0oXjNuTuhjGMMoBe7OMIpvmMpPVO8S/CX+CG0r0YLHuAZ1lLC9+ioJ/gpOms8347p9M5rNGdd6MAOZtSndRc28LmW5NrwCQvC/+14inH0u1n3Al4JeR9mkTRjJc1qBCdYxhdh2z3MCgNUV1rGT5SySBLxwE5cfQcJejCF/ZR0uOruc+G8TJcV8BZbtyQxhm9YFXJWMI8PWQQV9GXsJ3gjpBlMvxVFPwZqJakFQ/iF0XRdFobJFY9TkidC4gPhvlwxKEZNNybV0Yt6MCHMURK9SHKZkv/ho2h0P/6iuylngksxgd+JCfwn7wrgK87FBC7lXUEFl3iBnUZUAJuiB/n8Cq/BGQ5x0SiJ4AK7/wCn8UdE6vGrrAAAAABJRU5ErkJggg==") no-repeat left center transparent;
+    background-size: 100% 100%;
+}
+</style>
+{% endblock %}
+<!--分隔線--> 
+{% block content %}
+
+<nav class="navbar navbar-expand-md" style="border-bottom:solid 20px;border-color:#00BB00;margin-top:20px;">
+    <div class="navbar-collapse collapse w-100 order-1 order-md-0 dual-collapse2">
+        <ul class="navbar-nav mr-auto">
+            <li class="nav-item active">
+                <span class="v13_58" ><img src="/media/image/home.png" width="60" height="60">登入畫面</span>
+            </li>
+            
+        </ul>
+    </div>
+    
+    <div class="navbar-collapse collapse w-100 order-3 dual-collapse2">
+        <ul class="navbar-nav ml-auto">
+            <li class="nav-item">
+        <a href="/"><button  class="button5">&nbsp;&nbsp;回登入畫面</button></a>
+    </li>
+        </ul>
+    </div>
+</nav>
+
+<br>
+{% if message %}
+    <div class="alert alert-warning">{{ message }}</div>
+{% endif %}
+
+  <label for="cameraFileInput">
+      <span class="button4">開啟相機</span>
+      <!-- The hidden file `input` for opening the native camera -->
+      <input
+        id="cameraFileInput"
+        type="file"
+        accept="image/*"
+        capture="environment"
+      />
+</label>
+
+    <!-- displays the picture uploaded from the native camera -->
+    
+    <div id="capture" >
+      <img id="pictureFromCamera" />
+    </div>
+    <!--
+    <button onclick="block_capture()" id="PicDownload" style="display:none">下載大頭貼</button>
+    -->
+<!--enctype="multipart/form-data" 丟圖片時要加的-->
+  
+    <form action="/Signup/" enctype="multipart/form-data" method="POST"> 
+        {% csrf_token %}
+        <table>
+            {{ signup_form.as_table }}
+        </table>
+        <input type = 'submit' class="btn" value = '註冊'>
+    </from>
+    <br>
+
+
+
+<script>
+var obj
+var imgSrc
+document
+  .getElementById("cameraFileInput")
+  .addEventListener("change", function () {
+    document
+      .getElementById("pictureFromCamera")
+      .setAttribute("src", window.URL.createObjectURL(this.files[0]));
+      $("#PicDownload").removeAttr("style")
+      
+      obj = document.getElementById("pictureFromCamera");
+      imgSrc = obj.getAttribute("src");
+      block_capture()
+  });
+  
+  
+  
+//下載圖片
+function block_capture() {
+            html2canvas(document.querySelector("#pictureFromCamera")).then(function (canvas) {
+                a = document.createElement('a');
+                a.href = canvas.toDataURL("image/jpeg", 0.92).replace("image/jpeg", "image/octet-stream");
+                a.download = imgSrc+'.jpg';
+                a.click();
+            });
+        }
+
+</script>
+
+
+
+
+
+
+<br><br>
+
+
+{% endblock %}

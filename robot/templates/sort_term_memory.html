@@ -1,0 +1,264 @@
+{% extends "base.html"%}
+{% block title %}短期記憶遊戲{% endblock %}
+
+{% block javascript %} 
+<script>
+    $(document).ready(function(){
+        var pic_answer = []
+        var pic_choice = []
+        var user_name = '{{ name }}'
+        pic_answer.push($("#pic1").attr('src'))
+        pic_answer.push($("#pic2").attr('src'))
+        pic_answer.push($("#pic3").attr('src')) //記住一開始三張的url
+        window.setInterval(countdown2, 1000);
+        timer2 = document.getElementById("countdown2");
+        function countdown2(){
+            timer2.innerHTML = timer2.innerHTML - 1;
+        }
+        setTimeout(function(){
+            $("#pic1").css("display", 'none');
+            $("#pic2").css("display", 'none');
+            $("#pic3").css("display", 'none');
+            clearInterval(timer2);
+            $("#countdown2").css("display", 'none');
+            $("#readybtn").css("display", "").addClass("fadein")
+        }, 5000);//讓三張圖片出現五秒
+        $("#readybtn").click(function(){
+            $(".after").removeClass("after").addClass("fadein")
+            $(this).css("display", "none");
+            window.setInterval(countdown, 1000);
+            timer = document.getElementById("countdown");
+        });
+        function countdown(){
+            timer.innerHTML = timer.innerHTML - (-1);
+        }
+
+        $("div #pic_after").each(function(){
+            var f = 0;//每個id都有屬於自己的f做紀錄
+            $(this).click(function(){
+                if(f == 0){
+                    f = 1;
+                    pic_choice.push($(this).attr("src"));
+                    $(this).css("border", "5px solid red");
+                    console.log(pic_choice);
+                }
+                else{
+                    f = 0;
+                    delete_index = $.inArray($(this).attr("src"), pic_choice);
+                    pic_choice.splice(delete_index, 1);
+                    $(this).css("border", "");
+                    console.log(pic_choice);
+                }
+            })
+            
+        });
+        
+        $("#nextbtn").click(function(){
+            count_number = $("#countdown").text();
+            $.ajax({
+                url:"/sort_term_memory_ajax/{{ pk }}/",
+                traditional: true,
+                type:'GET',
+                //dataType:'json',
+                data:{
+                    "answer1": pic_answer[0],
+                    "answer2": pic_answer[1],
+                    "answer3": pic_answer[2],
+                    "c1": pic_choice[0],
+                    "c2": pic_choice[1],
+                    "c3": pic_choice[2],
+                    "c4": pic_choice[3],
+                    "c5": pic_choice[4],
+                    "count": count_number,
+                },
+                success: function(){
+                }
+            })
+        });
+    });
+</script>
+{% endblock %}
+
+{% block css %}
+<style>
+    h1 {
+        text-align: left;
+        text-transform: uppercase;
+        color: #4CAF50;
+    }
+    .prepareButton {
+    display: inline-block;
+    text-align: center;
+    vertical-align: middle;
+    padding: 14px 19px;
+    border: 3px solid #2e0606;
+    border-radius: 62px;
+    background: #f2f2f2;
+    background: -webkit-gradient(linear, left top, left bottom, from(#f2f2f2), to(#fafafa));
+    background: -moz-linear-gradient(top, #f2f2f2, #fafafa);
+    background: linear-gradient(to bottom, #f2f2f2, #fafafa);
+    -webkit-box-shadow: #fafafa 0px 0px 40px 0px;
+    -moz-box-shadow: #fafafa 0px 0px 40px 0px;
+    box-shadow: #fafafa 0px 0px 40px 0px;
+    text-shadow: #591717 1px 1px 1px;
+    font: normal normal normal 28px arial;
+    color: #0d0d0d;
+    text-decoration: none;
+}
+.prepareButton:hover{
+    background-color: #000;
+    color: rgb(39, 39, 39);
+}
+
+.prepareButton:active {
+  background-color: #3e8e41;
+  box-shadow: 0 5px rgb(148, 148, 148);
+  transform: translateY(4px);
+}
+.prepareButton:focus {
+    border: 3px solid #3b3b3b;
+    background: #ffffff;
+    background: -webkit-gradient(linear, left top, left bottom, from(#ffffff), to(#ffffff));
+    background: -moz-linear-gradient(top, #ffffff, #ffffff);
+    background: linear-gradient(to bottom, #ffffff, #ffffff);
+    color: #0d0d0d;
+    text-decoration: none;
+}
+.prepareButton:active {
+    background: #919191;
+    background: -webkit-gradient(linear, left top, left bottom, from(#919191), to(#fafafa));
+    background: -moz-linear-gradient(top, #919191, #fafafa);
+    background: linear-gradient(to bottom, #919191, #fafafa);
+}
+.prepareButton:after{
+    content:  "\0000a0";
+    display: inline-block;
+    height: 24px;
+    width: 24px;
+    line-height: 24px;
+    margin: 0 -4px -6px 4px;
+    position: relative;
+    top: 0px;
+    left: 0px;
+    background: url("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABgAAAAYCAYAAADgdz34AAAACXBIWXMAAA7EAAAOxAGVKw4bAAABF0lEQVRIibXWQWrCQBjF8V9FuugJXPQS3ZTiWqQn6HEEN917DilFvIMHKd2WLooLpWAXiTDqTGYS0wcDYSZ5/+97CZmBEdbY4dBybHEno3UH42LAENP6+hObXDVn2uM3Mj/BI14F1Sxbmqc0UXV2wHzQk+lRU7w7i62vDib4CfzmGPQFCGM5YBYuXguYuqz8RNcAkrGUAJ5jN5+ZJ2PJAWb13CIBycUyxks9LgD3+A7mF5HKc7Esg/VoB08RyEB5LFnAsc0Q8hapPKUiQAzS+LV0AXAZV1PlnQDHTr4KzU8Aw8IHNnhQ/dJbqRQAH23NaX5RvejfATeqzf5Wty0zpbHqj7CHle6bfm6sqI4tK92OLamxqz1Hf7umx5GpaJqCAAAAAElFTkSuQmCC") no-repeat left center transparent;
+    background-size: 100% 100%;
+}
+.okButton {
+    display: inline-block;
+    text-align: center;
+    vertical-align: middle;
+    padding: 14px 20px;
+    border: 5px solid #3d3d3d;
+    border-radius: 40px;
+    background: #ffffff;
+    background: -webkit-gradient(linear, left top, left bottom, from(#ffffff), to(#c7c7c7));
+    background: -moz-linear-gradient(top, #ffffff, #c7c7c7);
+    background: linear-gradient(to bottom, #ffffff, #c7c7c7);
+    -webkit-box-shadow: #cfcfcf 0px 0px 40px 0px;
+    -moz-box-shadow: #cfcfcf 0px 0px 40px 0px;
+    box-shadow: #cfcfcf 0px 0px 40px 0px;
+    text-shadow: #591717 1px 1px 1px;
+    font: normal normal normal 28px arial;
+    color: #4a4a4a;
+    text-decoration: none;
+}
+.okButton:hover{
+    background-color: #000;
+    color: #000;
+}
+
+.okButton:active {
+  background-color: #3e8e41;
+  box-shadow: 0 5px rgb(148, 148, 148);
+  transform: translateY(4px);
+}
+.okButton:focus {
+    border: 7px solid #626262;
+    background: #ffffff;
+    background: -webkit-gradient(linear, left top, left bottom, from(#ffffff), to(#efefef));
+    background: -moz-linear-gradient(top, #ffffff, #efefef);
+    background: linear-gradient(to bottom, #ffffff, #efefef);
+    color: #4a4a4a;
+    text-decoration: none;
+}
+.okButton:active {
+    background: #999999;
+    background: -webkit-gradient(linear, left top, left bottom, from(#999999), to(#c7c7c7));
+    background: -moz-linear-gradient(top, #999999, #c7c7c7);
+    background: linear-gradient(to bottom, #999999, #c7c7c7);
+}
+.okButton:after{
+    content:  "\0000a0";
+    display: inline-block;
+    height: 32px;
+    width: 32px;
+    line-height: 24px;
+    margin: 0 -4px -6px 4px;
+    position: relative;
+    top: -3px;
+    left: 1px;
+    background: url("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABgAAAAYCAYAAADgdz34AAAACXBIWXMAAA7EAAAOxAGVKw4bAAABMklEQVRIie3SsSvFURQH8A9JMkhCMhksyqYkZcNoeQyS1eD/8AcYMUoxiDIhizfI8JCBEmVAipAigzDc+/LSe7/ee4nlfet0zz3ndr/3e76XCv4bVXlq05jAO15xj1tc4xLHcf0ohqA6T20c/XjCATrQhxasYRHNOedb0V4KQRb7cd2NcYd5NGIFG9jBBYbLIbjCSLz4DgOYwxYecO57XAWRRPCEMXTFmEEGpzGvjzFZLsEb9uKlGSwIn6In5pmcKIiahN678JuG4j6rYBGbwsjEM3XlKKgVRvTTg5aYZ+upJAVJBE1JLysWSSPqFL5iCr04waBg/pzgBawKaotGGp84xCOWMIpuNGAq9tMxXmK/ZAWzWI8vzsUyntGGMxzhphwFv4IkkysEyG/ytmBiBX+DL2vKSsQU4cklAAAAAElFTkSuQmCC") no-repeat left center transparent;
+    background-size: 100% 100%;
+}
+    #countdown2{
+        text-align:center;
+        font-family:fantasy;
+        font-size:700%;
+        color: green;
+    }
+    #countdown{
+        text-align:center;
+        font-family:fantasy;
+        font-size:700%;
+        color: green;
+    }
+    
+    img{
+        width: 100%;
+        height: 320px;
+        object-fit: cover;
+    }
+    .after{
+        opacity: 0;
+        display: none;
+    }
+    
+    .fadein{
+        opacity: 1;
+        animation-name: fadeInOpacity;
+        animation-iteration-count: 1;
+        animation-timing-function: ease-in;
+        animation-duration: 0.5s;
+    }
+    @keyframes fadeInOpacity {
+        0% {
+            opacity: 0;
+        }
+        100% {
+            opacity: 1;
+        }
+    }
+</style>
+{% endblock%}
+
+{% block content %}
+    <div style="margin:20px">
+        <div class="row">
+            <div class="col-9 col-md-4 first" ><img src="{{pic1_first}}" id="pic1"></div>
+            <div class="col-9 col-md-4 first" ><img src="{{pic2_first}}" id="pic2"></div>
+            <div class="col-9 col-md-4 first" ><img src="{{pic3_first}}" id="pic3"></div>
+        </div>
+        <button class="prepareButton"id="readybtn" style="display:none;">準備好了</button>
+        <div class="row">   
+            {% for pic_change in pic_change_total %}
+            <div class="after col-9 col-md-4" ><img src="{{pic_change}}" id="pic_after" ></div>
+            {% endfor %}
+        </div>  
+        <br>
+        <a href="/settlement/{{ pk }}/SortTermMemoryGame/"<button id="nextbtn" class="after okButton">送出</button></a>
+        <br><br>
+        <p id="countdown2">5</p>
+        <p id="countdown" class="after">0</p>
+    <!---->
+    </div>
+{% endblock %}

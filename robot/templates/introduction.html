@@ -1,0 +1,203 @@
+{% extends "base.html" %}
+{% block title %}遊戲介紹{% endblock %}
+{% block javascript %} 
+<script>
+  var text = $(IntroduceText).text()
+  var msg = new SpeechSynthesisUtterance();
+  msg.text = text
+  msg.lang = "zh"
+  msg.volume = 50;
+  msg.rate = 0.7;
+  msg.pitch = 1.5
+  function play(){
+    speechSynthesis.speak(msg);
+  }
+</script>
+{% endblock %}
+{% block css %}
+<style>
+  .button {
+    background-color: #4CAF50; /* Green */
+    border: none;
+    color: white;
+    padding: 15px 32px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 20px;
+    margin: 4px 2px;
+    cursor: pointer;
+    -webkit-transition-duration: 0.4s; /* Safari */
+    transition-duration: 0.4s;
+}
+  .button2:hover {
+    box-shadow: 0 12px 16px 0 rgba(0,0,0,0.24),0 17px 50px 0 rgba(0,0,0,0.19);
+  }
+  .v13_58 {
+        color: rgba(0, 0, 0, 1);
+        font-family: Roboto;
+        font-weight: Regular;
+        font-size: 50px;
+        opacity: 1;
+        top: 0px;
+        left:3px;
+    }
+    .soundplayer {
+    display: inline-block;
+    text-align: center;
+    vertical-align: middle;
+    padding: 14px 43px;
+    border: 9px solid #808080;
+    border-radius: 42px;
+    background: #ffffff;
+    background: -webkit-gradient(linear, left top, left bottom, from(#ffffff), to(#ffffff));
+    background: -moz-linear-gradient(top, #ffffff, #ffffff);
+    background: linear-gradient(to bottom, #ffffff, #ffffff);
+    -webkit-box-shadow: #ffffff 0px 0px 11px 0px;
+    -moz-box-shadow: #ffffff 0px 0px 11px 0px;
+    box-shadow: #ffffff 0px 0px 11px 0px;
+    text-shadow: #4e041e 0px 1px 1px;
+    font: normal normal bold 32px comic sans ms;
+    color: #000000;
+    text-decoration: none;
+}
+.soundplayer:hover{
+    background-color: #000;
+    color: #000;
+}
+
+.soundplayer:active {
+  background-color: #3e8e41;
+  box-shadow: 0 5px #666;
+  transform: translateY(4px);
+}
+.soundplayer:focus {
+    border: 9px solid #a6a6a6;
+    color: #000000;
+    text-decoration: none;
+}
+.soundplayer:active {
+    background: #999999;
+    background: -webkit-gradient(linear, left top, left bottom, from(#999999), to(#ffffff));
+    background: -moz-linear-gradient(top, #999999, #ffffff);
+    background: linear-gradient(to bottom, #999999, #ffffff);
+}
+.soundplayer:before{
+    content:  "\0000a0";
+    display: inline-block;
+    height: 28px;
+    width: 28px;
+    line-height: 24px;
+    margin: 0 4px -6px -4px;
+    position: relative;
+    top: 0px;
+    left: -10px;
+    background: url("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABgAAAAYCAYAAADgdz34AAAACXBIWXMAAA7EAAAOxAGVKw4bAAAA/ElEQVRIie2VIQvCUBSFP2Y1G4xiEptFzGIVzIb9BDEYrWZ/gVGMVk0iiMUkCFpsBpuYDGOG3cF1uO2xOYseGOdxuO+cvb337uCPL8MCmmkMqjHmI8ABuknMbeAeEzADXOAGlEyN88BEJroGtUepm5qYV4G9Mg8GWEA/8LYdqXsQswob75O4hAcMRFsHQs+iD3xx+MYo7NFo4W2qy+vpGYu2tETIRS0lAgtgI+O20nfCFT/ASRgAsBUuK+0iXLDIGJ8IqAuflFYUvqbdgxbQkPFc6TXhQ9RkG/NjulLa22MaBpOL1iPhRfORaavQsMmo2Wlk2q5NkPqH84N4Avh1UjMFOj/lAAAAAElFTkSuQmCC") no-repeat left center transparent;
+    background-size: 100% 100%;
+}
+.starBtn {
+    display: inline-block;
+    text-align: center;
+    vertical-align: middle;
+    padding: 10px 35px;
+    border: 9px solid #FF8000;
+    border-radius: 42px;
+    background: #ffffff;
+    background: -webkit-gradient(linear, left top, left bottom, from(#ffffff), to(#ffffff));
+    background: -moz-linear-gradient(top, #ffffff, #ffffff);
+    background: linear-gradient(to bottom, #ffffff, #ffffff);
+    -webkit-box-shadow: #ffffff 0px 0px 11px 0px;
+    -moz-box-shadow: #ffffff 0px 0px 11px 0px;
+    box-shadow: #ffffff 0px 0px 11px 0px;
+    text-shadow: #4e041e 0px 1px 1px;
+    font: normal normal bold 32px comic sans ms;
+    color: #000000;
+    text-decoration: none;
+}
+.starBtn:hover{
+    background-color: #000;
+    color: #000;
+}
+
+.starBtn:active {
+  background-color: #3e8e41;
+  box-shadow: 0 5px #666;
+  transform: translateY(4px);
+}
+.starBtn:focus {
+    border: 9px solid #FFAF60;
+    color: #000000;
+    text-decoration: none;
+}
+.starBtn:active {
+    background: #999999;
+    background: -webkit-gradient(linear, left top, left bottom, from(#999999), to(#ffffff));
+    background: -moz-linear-gradient(top, #999999, #ffffff);
+    background: linear-gradient(to bottom, #999999, #ffffff);
+}
+.starBtn:after{
+    content:  "\0000a0";
+    display: inline-block;
+    height: 28px;
+    width: 28px;
+    line-height: 24px;
+    margin: 0 -4px -6px 4px;
+    position: relative;
+    top: 0px;
+    left: 7px;
+    background: url("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABgAAAAYCAYAAADgdz34AAAACXBIWXMAAA7EAAAOxAGVKw4bAAAA+klEQVRIie3SvUqDMQCF4Ye2o3ZwcnBwVvASBEHo3kFBKuiueAeCdHbSXaEgeAmCIDiJUAqCrgo6uOpY/BtUKDXxi+Fz6wtZQnLe5CSMKKAamGviAuO4RL9s6Tbev8YtllDJDSvaOI1jnGCmLEGotkX0sIt6jmiQwYpC4x6tyOF+kNPtFDo4w1yOIFRRiHl0sYeJvwheEwVQwwausRbKy/5+Q0ziACv/JYhSluAR6zhKEaQ+MrxgH7M4xNvwglpgU+ojn2MTV78tyqnoAatYKAonfINYRX2fdezgOfU0qRWdYgs3qcHfFFV0h2U0csJjNPGENsbKCh0R5QNnPS6ydOW/MQAAAABJRU5ErkJggg==") no-repeat left center transparent;
+    background-size: 100% 100%;
+}
+</style>
+{% endblock %}
+{% block content %}
+  <nav class="navbar navbar-expand-md" style="border-bottom:solid 20px;border-color:#00BB00;margin-top:20px;margin-bottom:20px;">
+    <div class="navbar-collapse collapse w-100 order-1 order-md-0 dual-collapse2">
+        <ul class="navbar-nav mr-auto">
+            <li class="nav-item active">
+                <span class="v13_58" ><img src="/media/image/presentation.png" width="60" height="60">遊戲介紹</span>
+            </li>
+        </ul>
+    </div>
+</nav>
+
+<h2>歡迎遊玩{{ game_data.title }}!<br><p>以下是本遊戲的玩法介紹:</p></h2>
+<div style="margin:100px;text-align:center">
+  <p style="font-size:200%;" id="IntroduceText">{{ game_data.text }}</p>
+</div>
+
+<div class="row">
+    <div class="col">
+        
+    </div>
+    <div class="col UserData">
+      
+    </div>
+</div>
+
+<ul class="nav nav-pills nav-fill">
+  <li class="nav-item">
+    <button class="soundplayer"><i class="fas fa-assistive-listening-systems " onclick="play()">播放</i></button>
+  </li>
+  <li class="nav-item">&nbsp;</li>
+  <li class="nav-item">
+    {% if gameName == "定向力遊戲"%}
+      <a href = '/OrientationPadGame/{{ pk }}/{{ n }}/{{ gameName }}/'>
+        <img src="/media/image/ipad.png" width="60" height="60"><button class="starBtn">用平板開始遊玩</button>
+      </a>
+      <br>
+      <br>
+      <a href = '/OrientationGame/{{ pk }}/{{ n }}/{{ gameName }}/'>
+        <img src="/media/image/desktop.png" width="60" height="60"><button class="starBtn">用電腦開始遊玩</button>
+      </a>
+    {% else %}
+      <a href = '/{{ title }}/{{ pk }}/{{ n }}/{{ gameName }}/'><button class="starBtn">開始遊戲</button></a>
+    {% endif %}
+  </li>
+  
+</ul>
+
+
+
+    
+{% endblock %}
