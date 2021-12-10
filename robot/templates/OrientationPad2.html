@@ -1,0 +1,486 @@
+{% extends "base.html" %}
+{% block title %}定向力遊戲{% endblock %}
+{% block css %}
+<style>
+    h1 {
+        width: 100%;
+        padding: 10px;
+        text-align: center;
+    }
+
+    .wrapper {
+        outline: 1px solid gold;
+        position: relative;
+        margin: 50px auto;
+        max-width: 440px;
+        display: flex;
+        flex-wrap: wrap;
+    }
+
+    .empty,
+    .empty0 {
+        margin: 5px;
+        width: 100px;
+        height: 100px;
+        background-color: black;
+    }
+
+    .space {
+        margin: 5px;
+        width: 100px;
+        height: 100px;
+        background-color: white;
+    }
+
+    .drag,
+    .drag2 {
+        position: absolute;
+        width: 100px;
+        height: 100px;
+        background-color: red;
+        z-index: 1;
+    }
+
+    .active {
+        background-color: green;
+    }
+
+    h1 {
+        width: 100%;
+        padding: 10px;
+        text-align: center;
+    }
+
+    .wrapper,
+    .wrapper0 {
+        outline: 1px gold;
+        margin: 50px auto;
+        position: relative;
+        max-width: 220px;
+        display: flex;
+        flex-wrap: wrap;
+    }
+
+    .empty {
+        margin: 5px;
+        width: 100px;
+        height: 100px;
+        background-color: black;
+        display: ;
+    }
+
+    .drag {
+        position: absolute;
+        width: 100px;
+        height: 100px;
+        background-color: red;
+        z-index: 1;
+    }
+
+    .active {
+        background-color: green;
+    }
+
+    .fadein {
+        opacity: 1;
+        animation-name: fadeInOpacity;
+        animation-iteration-count: 1;
+        animation-timing-function: ease-in;
+        animation-duration: 0.5s;
+    }
+
+    @keyframes fadeInOpacity {
+        0% {
+            opacity: 0;
+        }
+
+        100% {
+            opacity: 1;
+        }
+    }
+
+    .after {
+        opacity: 0;
+        display: none;
+    }
+
+    #countdown2 {
+        text-align: center;
+        font-family: fantasy;
+        font-size: 700%;
+        color: green;
+    }
+
+    #countdown {
+        text-align: center;
+        font-family: fantasy;
+        font-size: 700%;
+        color: green;
+    }
+
+    .button {
+        background-color: #0088ff;
+        border: none;
+        color: white;
+        padding: 15px 32px;
+        text-align: center;
+        text-decoration: none;
+        display: inline-block;
+        font-size: 20px;
+        margin: 4px 2px;
+        cursor: pointer;
+        -webkit-transition-duration: 0.4s;
+        /* Safari */
+        transition-duration: 0.4s;
+        ;
+    }
+
+    .button:hover {
+        box-shadow: 0 12px 16px 0 rgba(0, 0, 0, 0.24), 0 17px 50px 0 rgba(0, 0, 0, 0.19);
+    }
+
+    .endButton {
+        display: inline-block;
+        text-align: center;
+        vertical-align: middle;
+        padding: 14px 20px;
+        border: 5px solid #3d3d3d;
+        border-radius: 40px;
+        background: #ffffff;
+        background: -webkit-gradient(linear, left top, left bottom, from(#ffffff), to(#c7c7c7));
+        background: -moz-linear-gradient(top, #ffffff, #c7c7c7);
+        background: linear-gradient(to bottom, #ffffff, #c7c7c7);
+        -webkit-box-shadow: #cfcfcf 0px 0px 40px 0px;
+        -moz-box-shadow: #cfcfcf 0px 0px 40px 0px;
+        box-shadow: #cfcfcf 0px 0px 40px 0px;
+        text-shadow: #591717 1px 1px 1px;
+        font: normal normal normal 28px arial;
+        color: #4a4a4a;
+        text-decoration: none;
+    }
+
+    .endButton:hover {
+        background-color: #000;
+        color: #000;
+    }
+
+    .endButton:active {
+        background-color: #3e8e41;
+        box-shadow: 0 5px rgb(148, 148, 148);
+        transform: translateY(4px);
+    }
+
+    .endButton:focus {
+        border: 7px solid #626262;
+        background: #ffffff;
+        background: -webkit-gradient(linear, left top, left bottom, from(#ffffff), to(#efefef));
+        background: -moz-linear-gradient(top, #ffffff, #efefef);
+        background: linear-gradient(to bottom, #ffffff, #efefef);
+        color: #4a4a4a;
+        text-decoration: none;
+    }
+
+    .endButton:active {
+        background: #999999;
+        background: -webkit-gradient(linear, left top, left bottom, from(#999999), to(#c7c7c7));
+        background: -moz-linear-gradient(top, #999999, #c7c7c7);
+        background: linear-gradient(to bottom, #999999, #c7c7c7);
+    }
+
+    .endButton:after {
+        content: "\0000a0";
+        display: inline-block;
+        height: 32px;
+        width: 32px;
+        line-height: 24px;
+        margin: 0 -4px -6px 4px;
+        position: relative;
+        top: -3px;
+        left: 1px;
+        background: url("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABgAAAAYCAYAAADgdz34AAAACXBIWXMAAA7EAAAOxAGVKw4bAAABMklEQVRIie3SsSvFURQH8A9JMkhCMhksyqYkZcNoeQyS1eD/8AcYMUoxiDIhizfI8JCBEmVAipAigzDc+/LSe7/ee4nlfet0zz3ndr/3e76XCv4bVXlq05jAO15xj1tc4xLHcf0ohqA6T20c/XjCATrQhxasYRHNOedb0V4KQRb7cd2NcYd5NGIFG9jBBYbLIbjCSLz4DgOYwxYecO57XAWRRPCEMXTFmEEGpzGvjzFZLsEb9uKlGSwIn6In5pmcKIiahN678JuG4j6rYBGbwsjEM3XlKKgVRvTTg5aYZ+upJAVJBE1JLysWSSPqFL5iCr04waBg/pzgBawKaotGGp84xCOWMIpuNGAq9tMxXmK/ZAWzWI8vzsUyntGGMxzhphwFv4IkkysEyG/ytmBiBX+DL2vKSsQU4cklAAAAAElFTkSuQmCC") no-repeat left center transparent;
+        background-size: 100% 100%;
+    }
+
+    .prepareButton {
+        display: inline-block;
+        text-align: center;
+        vertical-align: middle;
+        padding: 14px 19px;
+        border: 3px solid #2e0606;
+        border-radius: 62px;
+        background: #f2f2f2;
+        background: -webkit-gradient(linear, left top, left bottom, from(#f2f2f2), to(#fafafa));
+        background: -moz-linear-gradient(top, #f2f2f2, #fafafa);
+        background: linear-gradient(to bottom, #f2f2f2, #fafafa);
+        -webkit-box-shadow: #fafafa 0px 0px 40px 0px;
+        -moz-box-shadow: #fafafa 0px 0px 40px 0px;
+        box-shadow: #fafafa 0px 0px 40px 0px;
+        text-shadow: #591717 1px 1px 1px;
+        font: normal normal normal 28px arial;
+        color: #0d0d0d;
+        text-decoration: none;
+    }
+
+    .prepareButton:hover {
+        background-color: #000;
+        color: rgb(39, 39, 39);
+    }
+
+    .prepareButton:active {
+        background-color: #3e8e41;
+        box-shadow: 0 5px rgb(148, 148, 148);
+        transform: translateY(4px);
+    }
+
+    .prepareButton:focus {
+        border: 3px solid #3b3b3b;
+        background: #ffffff;
+        background: -webkit-gradient(linear, left top, left bottom, from(#ffffff), to(#ffffff));
+        background: -moz-linear-gradient(top, #ffffff, #ffffff);
+        background: linear-gradient(to bottom, #ffffff, #ffffff);
+        color: #0d0d0d;
+        text-decoration: none;
+    }
+
+    .prepareButton:active {
+        background: #919191;
+        background: -webkit-gradient(linear, left top, left bottom, from(#919191), to(#fafafa));
+        background: -moz-linear-gradient(top, #919191, #fafafa);
+        background: linear-gradient(to bottom, #919191, #fafafa);
+    }
+
+    .prepareButton:after {
+        content: "\0000a0";
+        display: inline-block;
+        height: 24px;
+        width: 24px;
+        line-height: 24px;
+        margin: 0 -4px -6px 4px;
+        position: relative;
+        top: 0px;
+        left: 0px;
+        background: url("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABgAAAAYCAYAAADgdz34AAAACXBIWXMAAA7EAAAOxAGVKw4bAAABF0lEQVRIibXWQWrCQBjF8V9FuugJXPQS3ZTiWqQn6HEEN917DilFvIMHKd2WLooLpWAXiTDqTGYS0wcDYSZ5/+97CZmBEdbY4dBybHEno3UH42LAENP6+hObXDVn2uM3Mj/BI14F1Sxbmqc0UXV2wHzQk+lRU7w7i62vDib4CfzmGPQFCGM5YBYuXguYuqz8RNcAkrGUAJ5jN5+ZJ2PJAWb13CIBycUyxks9LgD3+A7mF5HKc7Esg/VoB08RyEB5LFnAsc0Q8hapPKUiQAzS+LV0AXAZV1PlnQDHTr4KzU8Aw8IHNnhQ/dJbqRQAH23NaX5RvejfATeqzf5Wty0zpbHqj7CHle6bfm6sqI4tK92OLamxqz1Hf7umx5GpaJqCAAAAAElFTkSuQmCC") no-repeat left center transparent;
+        background-size: 100% 100%;
+    }
+</style>
+{% endblock %}
+{% block content %}
+<h2>歡迎遊玩定向力遊戲(平板模式)!</h2>
+<h3>
+    <div style="font-size:150%;" id="IntroduceText"> 遊戲提示:請將上方的4個色塊正確填入下方4個區塊</div>
+</h3>
+<div class="wrapper0">
+    {% for color in randomColor %}
+    <div class="empty0" id="{{ color }}" style="background-color:{{ color }}"></div>
+    {% endfor %}
+</div>
+<button class="prepareButton" id="readybtn" style="display:none;">準備好了</button>
+
+
+<div class="after wrapper">
+    {% for color in colors %}
+    <div class="empty">
+        <div class="drag" id="{{ color }}" style="background-color:{{ color }}"></div>
+    </div>
+    {% endfor %}
+
+    <div class="space"></div>
+    <div class="space"></div>
+
+    {% for color in randomColor %}
+    <div class="empty" id="{{ color }}" style="background-color:black"></div>
+    {% endfor %}
+</div>
+
+<button style="display:none" class="endButton"><a href="/settlement/{{ pk }}/OrientationGame/">送出</a></button>
+<p id="countdown2">5</p>
+<p id="countdown" class="after">0</p>
+{% endblock %}
+
+{% block javascript%}
+<script>
+    $(document).ready(function () {
+        window.setInterval(countdown2, 1000);
+        timer2 = document.getElementById("countdown2");
+        function countdown2() {
+            timer2.innerHTML = timer2.innerHTML - 1;
+        }
+        setTimeout(function () {
+            $(".wrapper0").css("display", 'none');
+            $("")
+            clearInterval(timer2);
+            $("#countdown2").css("display", 'none');
+            //$(".frame0").css("display", "none")
+            $("#readybtn").css("display", "").addClass("fadein")
+        }, 5000);//讓三張圖片出現五秒
+        $("#readybtn").click(function () {
+            $(".after").removeClass("after").addClass("fadein")
+            $(this).css("display", "none");
+            window.setInterval(countdown, 1000);
+            timer = document.getElementById("countdown");
+        });
+        function countdown() {
+            timer.innerHTML = timer.innerHTML - (-1);
+        }
+
+        const wrapper = document.querySelector('.wrapper');
+        const empty = Array.from(document.querySelectorAll('.empty'));
+        const drag = document.querySelectorAll('.drag');
+
+
+        //drag.addEventListener('touchmove', touchMove);
+        //drag.addEventListener('touchend', touchEnd);
+
+
+
+
+        drag.forEach(elem => {
+            elem.addEventListener('touchmove', touchMove);
+            elem.addEventListener('touchend', touchEnd);
+        });
+        /*
+        droppableElements.forEach(elem => {
+            elem.addEventListener("dragenter", dragEnter);
+            elem.addEventListener("dragover", dragOver);
+            elem.addEventListener("dragleave", dragLeave);
+            elem.addEventListener("drop", drop);
+        });
+        */
+        let itemAppend = null;
+        // ------------------------ touchMove
+        function touchMove(event) {
+            event.preventDefault();
+
+            let touch1 = event.targetTouches[0];
+            let touch2 = event.targetTouches[0];
+            let touch3 = event.targetTouches[0];
+            let touch4 = event.targetTouches[0];
+            let target = event.target
+
+            if (target.id == "#ff6384") {
+                drag[0].style.top = `${touch1.pageY - (wrapper.offsetTop) - (drag[0].offsetWidth / 2)}px`;
+                drag[0].style.left = `${touch1.pageX - (wrapper.offsetLeft) - (drag[0].offsetHeight / 2)}px`;
+                empty.map(item => {
+                    if (
+                        drag[0].getBoundingClientRect().top + drag[0].offsetWidth / 2 < item.getBoundingClientRect().bottom &&
+                        drag[0].getBoundingClientRect().right - drag[0].offsetWidth / 2 > item.getBoundingClientRect().left &&
+                        drag[0].getBoundingClientRect().bottom - drag[0].offsetWidth / 2 > item.getBoundingClientRect().top &&
+                        drag[0].getBoundingClientRect().left + drag[0].offsetWidth / 2 < item.getBoundingClientRect().right
+
+                    ) {
+                        item.classList.add('active');
+                        itemAppend = item;
+                    }
+                    else {
+                        item.classList.remove('active');
+                        console.log(item)
+                    }
+                })
+            }
+
+            else if (target.id == "#36a2eb") {
+                drag[1].style.top = `${touch2.pageY - (wrapper.offsetTop) - (drag[1].offsetWidth / 2)}px`;
+                drag[1].style.left = `${touch2.pageX - (wrapper.offsetLeft) - (drag[1].offsetHeight / 2)}px`;
+                empty.map(item => {
+                    if (
+                        drag[1].getBoundingClientRect().top + drag[1].offsetWidth / 2 < item.getBoundingClientRect().bottom &&
+                        drag[1].getBoundingClientRect().right - drag[1].offsetWidth / 2 > item.getBoundingClientRect().left &&
+                        drag[1].getBoundingClientRect().bottom - drag[1].offsetWidth / 2 > item.getBoundingClientRect().top &&
+                        drag[1].getBoundingClientRect().left + drag[1].offsetWidth / 2 < item.getBoundingClientRect().right
+                    ) {
+                        item.classList.add('active');
+                        itemAppend = item;
+
+                    }
+                    else {
+                        item.classList.remove('active');
+                    }
+                })
+            }
+
+            else if (target.id == "#ffce56") {
+                drag[2].style.top = `${touch3.pageY - (wrapper.offsetTop) - (drag[2].offsetWidth / 2)}px`;
+                drag[2].style.left = `${touch3.pageX - (wrapper.offsetLeft) - (drag[2].offsetHeight / 2)}px`;
+                empty.map(item => {
+                    if (
+                        drag[2].getBoundingClientRect().top + drag[2].offsetWidth / 2 < item.getBoundingClientRect().bottom &&
+                        drag[2].getBoundingClientRect().right - drag[2].offsetWidth / 2 > item.getBoundingClientRect().left &&
+                        drag[2].getBoundingClientRect().bottom - drag[2].offsetWidth / 2 > item.getBoundingClientRect().top &&
+                        drag[2].getBoundingClientRect().left + drag[2].offsetWidth / 2 < item.getBoundingClientRect().right
+                    ) {
+                        item.classList.add('active');
+                        itemAppend = item;
+
+                    }
+                    else {
+                        item.classList.remove('active');
+                    }
+                })
+            }
+
+            else if (target.id == "#9966ff") {
+                drag[3].style.top = `${touch4.pageY - (wrapper.offsetTop) - (drag[3].offsetWidth / 2)}px`;
+                drag[3].style.left = `${touch4.pageX - (wrapper.offsetLeft) - (drag[3].offsetHeight / 2)}px`;
+                empty.map(item => {
+                    if (
+                        drag[3].getBoundingClientRect().top + drag[3].offsetWidth / 2 < item.getBoundingClientRect().bottom &&
+                        drag[3].getBoundingClientRect().right - drag[3].offsetWidth / 2 > item.getBoundingClientRect().left &&
+                        drag[3].getBoundingClientRect().bottom - drag[3].offsetWidth / 2 > item.getBoundingClientRect().top &&
+                        drag[3].getBoundingClientRect().left + drag[3].offsetWidth / 2 < item.getBoundingClientRect().right
+                    ) {
+                        item.classList.add('active');
+                        itemAppend = item;
+
+                    }
+                    else {
+                        item.classList.remove('active');
+
+                    }
+                })
+            }
+        }
+        var clist = []
+        var correct = 0 //答對題數
+        var dropCount = 0 //觀察圖片是否都填入
+        function touchEnd() {
+            if (itemAppend.classList.contains('active')) {
+                itemAppend.append(this);
+                if (this.id == itemAppend.id) {
+                    correct += 1
+                }
+                dropCount += 1
+                if (dropCount == 4) {
+                    $(".endButton").css("display", "")
+                }
+                this.style.top = `${itemAppend.offsetTop}px`;
+                this.style.left = `${itemAppend.offsetLeft}px`;
+
+
+                this.removeEventListener("touchmove", touchMove)
+                this.removeEventListener('touchend', touchEnd)
+            }
+            else {
+                this.style.top = `${itemAppend.offsetTop}px`;
+                this.style.left = `${itemAppend.offsetLeft}px`;
+
+            }
+        }
+
+        $(".endButton").click(function () {
+            count_number = $("#countdown").text();
+            $.ajax({
+                url: "/OrientationAjax/{{ pk }}/",
+                traditional: true,
+                type: 'GET',
+                //dataType:'json',
+                data: {
+                    "correct": correct,
+                    "count_number": count_number,
+                },
+                success: function () {
+                }
+            })
+        })
+    })
+</script>
+{% endblock %}

@@ -322,6 +322,23 @@
 }
 a{ text-decoration:none} 
     a:hover{ text-decoration:none}
+.frame {  
+    height: 300px; /*can be anything*/
+    width: 300px; /*can be anything*/
+    position: relative;
+}
+.picture {  
+    max-height: 100%;  
+    max-width: 100%; 
+    width: auto;
+    height: auto;
+    position: absolute;  
+    top: 0;  
+    bottom: 0;  
+    left: 0;  
+    right: 0;  
+    margin: auto;
+}
 </style>
 {% endblock %}
 {% block content %}
@@ -349,8 +366,8 @@ a{ text-decoration:none}
 </nav>
 
 <div class="row">
-    <div class="col">
-        <img src="{{individual.image.url }}" width="200" alt="錯誤" id="photo">
+    <div class="col frame">
+        <img class="picture" src="{{individual.image.url }}" width="200" alt="錯誤" id="photo">
     </div>
     <div class="col UserData">
         <p>姓名:{{ individual.name }}</p>

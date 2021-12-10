@@ -116,7 +116,8 @@
         font-size: 50px;
         opacity: 1;
         text-align: left;
-    }
+}
+
 </style>
 {% endblock%}
 
@@ -150,11 +151,14 @@
 <span class="v38_13">點擊頭像,即可登入</span>
 <div class="row">
     {% for userdata in userdatas %}
-    <div class="col-9 col-md-4  ">
+    <div class="col-9 col-md-4 ">
         <div class="card " style="width:100%;">
-            <a href = '/index/{{ userdata.pk }}'>
+            <a href = '/index/{{ userdata.pk }}' >
+                <div>
                 <img class="card-img-top" src="{{ userdata.image.url }}" alt="Card image" id="photo">
+                </div>
             </a>
+
             <div class="card-body">
                 <h4 class="card-title">{{ userdata.name }}</h4>
                 <p class="card-text">生日:{{ userdata.year }}年{{ userdata.month }}月{{ userdata.day }}日</p>

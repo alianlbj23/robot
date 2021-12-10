@@ -2,16 +2,16 @@
 {% block title %}遊戲介紹{% endblock %}
 {% block javascript %} 
 <script>
-  var text = $(IntroduceText).text()
-  var msg = new SpeechSynthesisUtterance();
-  msg.text = text
-  msg.lang = "zh"
-  msg.volume = 50;
-  msg.rate = 0.7;
-  msg.pitch = 1.5
-  function play(){
-    speechSynthesis.speak(msg);
-  }
+  const synth = window.speechSynthesis
+  const utter = new SpeechSynthesisUtterance()
+  utter.text = String($(IntroduceText).text())
+  console.log(SpeechSynthesisUtterance.lang)
+  synth.addEventListener('voiceschanged', () => {
+    console.log(synth.getVoices())
+    utter.voice = synth.getVoices()[1]
+  })
+  const play = () => synth.speak(utter)
+
 </script>
 {% endblock %}
 {% block css %}
@@ -148,6 +148,116 @@
     background: url("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABgAAAAYCAYAAADgdz34AAAACXBIWXMAAA7EAAAOxAGVKw4bAAAA+klEQVRIie3SvUqDMQCF4Ye2o3ZwcnBwVvASBEHo3kFBKuiueAeCdHbSXaEgeAmCIDiJUAqCrgo6uOpY/BtUKDXxi+Fz6wtZQnLe5CSMKKAamGviAuO4RL9s6Tbev8YtllDJDSvaOI1jnGCmLEGotkX0sIt6jmiQwYpC4x6tyOF+kNPtFDo4w1yOIFRRiHl0sYeJvwheEwVQwwausRbKy/5+Q0ziACv/JYhSluAR6zhKEaQ+MrxgH7M4xNvwglpgU+ojn2MTV78tyqnoAatYKAonfINYRX2fdezgOfU0qRWdYgs3qcHfFFV0h2U0csJjNPGENsbKCh0R5QNnPS6ydOW/MQAAAABJRU5ErkJggg==") no-repeat left center transparent;
     background-size: 100% 100%;
 }
+.attentionBtn {
+  display: inline-block;
+  text-align: center;
+  vertical-align: middle;
+  padding: 10px 10px;
+  border: 2px solid #000000;
+  border-radius: 47px;
+  background: #ff4a4a;
+  background: -webkit-gradient(linear, left top, left bottom, from(#ff4a4a), to(#992727));
+  background: -moz-linear-gradient(top, #ff4a4a, #992727);
+  background: linear-gradient(to bottom, #ff4a4a, #992727);
+  -webkit-box-shadow: #ff5959 0px 0px 9px 0px;
+  -moz-box-shadow: #ff5959 0px 0px 9px 0px;
+  box-shadow: #ff5959 0px 0px 9px 0px;
+  font: normal normal bold 30px arial;
+  color: #ffffff;
+  text-decoration: none;
+}
+
+.attentionBtn:hover {
+  background-color: #000;
+  color: #fff;
+}
+
+.attentionBtn:focus {
+  background: #ff5959;
+  background: -webkit-gradient(linear, left top, left bottom, from(#ff5959), to(#b62f2f));
+  background: -moz-linear-gradient(top, #ff5959, #b62f2f);
+  background: linear-gradient(to bottom, #ff5959, #b62f2f);
+  color: #ffffff;
+  text-decoration: none;
+}
+
+.attentionBtn:active {
+  background: #982727;
+  background: -webkit-gradient(linear, left top, left bottom, from(#982727), to(#982727));
+  background: -moz-linear-gradient(top, #982727, #982727);
+  background: linear-gradient(to bottom, #982727, #982727);
+}
+
+.attentionBtn:before {
+  content: "\0000a0";
+  display: inline-block;
+  height: 36px;
+  width: 36px;
+  line-height: 24px;
+  margin: 0 4px -6px -4px;
+  position: relative;
+  top: -3px;
+  left: -5px;
+  background: url("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABgAAAAYCAYAAADgdz34AAAACXBIWXMAAA7EAAAOxAGVKw4bAAAD6klEQVRIibWUa0wcVRTH/3PnsczQskCQauWxQts0rVICSqSppTFFCbYSrdFQH7XQWqNfjHzx0aYPYjTRtmkMUmPSD8YmtRHaKrErxrAplFosBSMlpWACicK6brfDLuzO7syd64eVSZcZsDF6vp2bc+7v/M+550JVVfyfxv1TwHdeL3q7L3i6ey7k8YTPFkRRUtVb/tLS0uCy5Xk3Dhw4aP4rwLa6rdk3g8Ht8UR8h67rqwghGaZpguM4cBwHxlhUFITfZCX9lCzLn3Z4OyfvCPDMU3XkZvDP2tnZ2VbGWB7P84sqNE0TlNKgIsvNFZXrjx8+eiyxIKBs7RpiErzDE3JQFEUy/zLGWDKJsws3DAPpS5Z+/tLOl19vbHxlZu48pbyi4vuaqKG/L0kSl5pMkZNzF6o2bUJRcTEmxifAWGrrCSGIx+PrBvr7c36f9HfYFDxZ+3jJ+MTERUWWl8yvesPGKnx4+KhVef+Vn7BnVwNEUbQp1HUdspJef/HHvlMAYLVhcmpqn5yWlnI5kOzxyhUrU9qS4XbbWgQAbrcbSzMyoMWi+w41H5IswP69b99NDf1Rp97yPI/BgaspZ7Fo1BEwPT2NRzZWwTTN1d1dPzxoAc6f/3YFzwvZjlkARkauQ9d1y4/HE9bAU8CxGCofrgSlBklzudZbgMysrFyn6ucsHA7j17ExyzcM3fElAYBLTgMhBLPRaL4FCE+HZ5wqmjOO43Bt6BfLvxUKOcZJooTAHwEwBhCO0yxASUlJgAMSjllIzmHgar/la3HNUUFRcTG+7/RCkkQw4JIFeHrbs0OUsfHFFPT0dKPv8mX8PDiI9rav4LThkUgY14aGoOuGWnL/A33A34v2xcmTZv699yimaVYTYltgAMlNvdTbC7fbjevDw4hEwjYVmqbBpBSCKB5pO/fNOUsBAHgKC08kEokFVVDDwBtvNmH3nlfx1rt7YRiGLYYxBgb4PIWe9+bOLMDpM18Hc3KXNWmaZs9Ecg4+XxcikTB8XV2Yr5RSCtNkvnVl5S+ebj9rLYptUquKPK+lpystLpfLBjEMA7quQxAE65tgYABDlBDSvDy/4KO29rMpBdoAo6MjqHuidpeiKJ8JguAk5nZgQhTFE2UPVexv+eR4wClmwe3aUvNYjd8/2cpxxOP0Yiil6uo1a7du3lzds2Nnw4JFOD8ZAB3eTm95eUW5JEkfmKbpp5TOi2DhDLd7eLHLF1Vwu73wfH1OwD9VMzMTqeZANsTjmgJA4Xn+SmZW1pfP1W+/0dC42+cIUFUVmZmZd8KxrLXlYyUai+UGAgGhsKBgZmx0RD1yrEVzBIRCoQXb9F/YX3itmCw1zjruAAAAAElFTkSuQmCC") no-repeat left center transparent;
+  background-size: 100% 100%;
+}
+.button5 {
+  display: inline-block;
+  text-align: center;
+  vertical-align: middle;
+  padding: 10px 22px;
+  border: 2px solid #3d3d3d;
+  border-radius: 27px;
+  background: #fafafa;
+  background: -webkit-gradient(linear, left top, left bottom, from(#fafafa), to(#ededed));
+  background: -moz-linear-gradient(top, #fafafa, #ededed);
+  background: linear-gradient(to bottom, #fafafa, #ededed);
+  -webkit-box-shadow: #171717 0px 0px 2px 0px;
+  -moz-box-shadow: #171717 0px 0px 2px 0px;
+  box-shadow: #171717 0px 0px 2px 0px;
+  text-shadow: #591717 1px 1px 1px;
+  font: normal normal normal 28px arial;
+  color: #0a0a0a;
+  text-decoration: none;
+}
+.button5:hover{
+  background-color: #000;
+  color: rgb(59, 59, 59);
+}
+
+.button5:active {
+background-color: #3e8e41;
+box-shadow: 0 5px rgb(148, 148, 148);
+transform: translateY(4px);
+}
+.button5:focus {
+  border: 2px solid #626262;
+  background: #ffffff;
+  background: -webkit-gradient(linear, left top, left bottom, from(#ffffff), to(#ffffff));
+  background: -moz-linear-gradient(top, #ffffff, #ffffff);
+  background: linear-gradient(to bottom, #ffffff, #ffffff);
+  color: #0a0a0a;
+  text-decoration: none;
+}
+.button5:active {
+  background: #969696;
+  background: -webkit-gradient(linear, left top, left bottom, from(#969696), to(#ededed));
+  background: -moz-linear-gradient(top, #969696, #ededed);
+  background: linear-gradient(to bottom, #969696, #ededed);
+}
+.button5:after{
+  content:  "\0000a0";
+  display: inline-block;
+  height: 24px;
+  width: 24px;
+  line-height: 24px;
+  margin: 0 -4px -6px 4px;
+  position: relative;
+  top: 0px;
+  left: -1px;
+  background: url("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABgAAAAYCAYAAADgdz34AAAACXBIWXMAAA7EAAAOxAGVKw4bAAABh0lEQVRIibXVMUhVYRQH8B/Pi4i8wUlERB4RTRIi4uAQDg4i4vhoampoCJEIaWpxEJKmMBAFRxERcVEcIlpaREJEQyIkRIJw0D2k4dwH+VDve3rff/vu933nf87//L9zuRnJLXv3xiPMNSp4H35jO49ghar1MNaxiFZ0oXjNuTuhjGMMoBe7OMIpvmMpPVO8S/CX+CG0r0YLHuAZ1lLC9+ioJ/gpOms8347p9M5rNGdd6MAOZtSndRc28LmW5NrwCQvC/+14inH0u1n3Al4JeR9mkTRjJc1qBCdYxhdh2z3MCgNUV1rGT5SySBLxwE5cfQcJejCF/ZR0uOruc+G8TJcV8BZbtyQxhm9YFXJWMI8PWQQV9GXsJ3gjpBlMvxVFPwZqJakFQ/iF0XRdFobJFY9TkidC4gPhvlwxKEZNNybV0Yt6MCHMURK9SHKZkv/ho2h0P/6iuylngksxgd+JCfwn7wrgK87FBC7lXUEFl3iBnUZUAJuiB/n8Cq/BGQ5x0SiJ4AK7/wCn8UdE6vGrrAAAAABJRU5ErkJggg==") no-repeat left center transparent;
+  background-size: 100% 100%;
+}
 </style>
 {% endblock %}
 {% block content %}
@@ -159,23 +269,34 @@
             </li>
         </ul>
     </div>
+
+    <div class="navbar-collapse collapse w-100 order-3 dual-collapse2">
+      <ul class="navbar-nav ml-auto">
+          <li class="nav-item">
+              <a href="/index/{{ pk }}/">
+              <img src="/media/image/logout.png" width="60" height="60">
+              <button  class="button5">&nbsp;&nbsp;上一頁</button>
+              </a>
+          </li>
+      </ul>
+  </div>
 </nav>
 
 <h2>歡迎遊玩{{ game_data.title }}!<br><p>以下是本遊戲的玩法介紹:</p></h2>
 <div style="margin:100px;text-align:center">
-  <p style="font-size:200%;" id="IntroduceText">{{ game_data.text }}</p>
+  {% if game_data.title == "注意力遊戲"%}
+    <div style="font-size:300%;" id="IntroduceText"> 
+      此音頻當中出現異音時，請<span style="color:red"><b>馬上</b></span>按下<span class="attentionBtn">錯誤</span>按鈕
+      (每回只能夠點擊三次)
+    </div>
+  {% else %}
+    <p style="font-size:300%;" id="IntroduceText">{{ game_data.text }}</p>
+  {% endif %}
 </div>
 
-<div class="row">
-    <div class="col">
-        
-    </div>
-    <div class="col UserData">
-      
-    </div>
-</div>
 
-<ul class="nav nav-pills nav-fill">
+
+<ul class="nav nav-pills nav-fill" style="margin:50px;text-align:center">
   <li class="nav-item">
     <button class="soundplayer"><i class="fas fa-assistive-listening-systems " onclick="play()">播放</i></button>
   </li>

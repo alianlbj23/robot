@@ -239,7 +239,7 @@ def AttentionGame(request, pk, n, gameName):
     if new.count() == 0:#如果玩家沒有注意力的資料這裡新增一個
         new = GameMod.objects.create(username = tmp, game_mod="AttentionGame")
         new.save()
-    return render(request, 'attention.html',locals())
+    return render(request, 'attention2.html',locals())
 
 def AttentionGameAjax(request, pk):
     if request.is_ajax():
@@ -248,22 +248,18 @@ def AttentionGameAjax(request, pk):
         ans3 = int(request.GET.get("ans3"))
         #先將資料傳入外部資料結構
         ans_register = [ans1, ans2, ans3]
+        print(ans_register)
         correct = 0
         correct_list = [6, 9, 12]
+        correct_slow_list = [7, 10, 13]
         for i in range(3):
             if ans_register[i] in correct_list:
-                correct += 1
-                correct_list.remove(ans_register[i])
-            else:
-                continue
-        if correct == 0:
-            correct = 0
-        elif correct == 1:
-            correct = 33
-        elif correct == 2:
-            correct = 66
-        elif correct == 3:
+                correct += 33
+            if ans_register[i] in correct_slow_list:
+                correct += 23
+        if correct == 99:
             correct = 100
+
         userdata = Userdata.objects.get(pk=pk)
         gamemod = GameMod.objects.get(username=userdata, game_mod="AttentionGame")
         NewAttentionData = Attention.objects.create(mod=gamemod, correct_rate=correct)
@@ -304,7 +300,6 @@ def introduction(request, pk, gameName):
     ans_register.clear()
     timer_register.clear()
     play_time_star.clear()
-
     game_data = game.objects.get(title = gameName)
     if gameName == "短期記憶遊戲":
         title = "SortTermMemoryGame"
@@ -324,7 +319,7 @@ def OrientationGame(request, pk, n, gameName):
         new.save()
     randomColor = ["#ff6384", "#36a2eb", "#ffce56", "#9966ff"]
     shuffle(randomColor)    
-    return render(request, 'Orientation.html', locals())
+    return render(request, 'Orientation2.html', locals())
 
 def OrientationAjax(request, pk):
     
@@ -345,7 +340,6 @@ def OrientationAjax(request, pk):
         
         newOrientationData = Orientation.objects.create(mod=gamemod, correct_rate=score, costTime=costtime)
         newOrientationData.save()
-        print("enter!!!!!!!!!!!11111")
         return JsonResponse(correct, safe=False)
 
 def OrientationPadGame(request, pk, n, gameName):
@@ -357,7 +351,7 @@ def OrientationPadGame(request, pk, n, gameName):
     randomColor = ["#ff6384", "#36a2eb", "#ffce56", "#9966ff"]
     shuffle(randomColor)
     colors = ["#ff6384", "#36a2eb", "#ffce56", "#9966ff"]
-    return render(request, 'OrientationPad.html', locals())
+    return render(request, 'OrientationPad2.html', locals())
 # Create your views here.
 
 def historyEnterPage(request, pk):

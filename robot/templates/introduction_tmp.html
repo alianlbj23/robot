@@ -1,0 +1,10 @@
+var text = $(IntroduceText).text()
+  var msg = new SpeechSynthesisUtterance();
+  msg.text = text
+  msg.lang = "zh"
+  msg.volume = 50;
+  msg.rate = 0.7;
+  msg.pitch = 1.5
+  function play(){
+    speechSynthesis.speak(msg);
+  }
