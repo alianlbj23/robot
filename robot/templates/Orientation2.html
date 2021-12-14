@@ -370,7 +370,10 @@
 {% block content %}
 <h2>歡迎遊玩定向力遊戲(電腦模式)!</h2>
 <h3>
-    <div style="font-size:150%;" id="IntroduceText"> 遊戲提示:請將上方的4個色塊正確填入下方4個區塊</div>
+    <div style="font-size:150%;" id="IntroduceText"> 遊戲提示:請依照這個順序，將色塊移動到下方</div>
+    <audio controls autoplay style="visibility:hidden" id="Orientation2">
+        <source src="/media/music/Orientation2.mp3" type="audio/mpeg">
+    </audio>
 </h3>
 
 <div class="frame0">
@@ -403,6 +406,9 @@
 {% block javascript %}
 <script>
     $(document).ready(function () {
+        var player = $("#Orientation2")[0];
+        player.pause()
+        player.play();
         window.setInterval(countdown2, 1000);
         timer2 = document.getElementById("countdown2");
         function countdown2() {

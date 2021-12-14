@@ -2,15 +2,26 @@
 {% block title %}遊戲介紹{% endblock %}
 {% block javascript %} 
 <script>
-  const synth = window.speechSynthesis
-  const utter = new SpeechSynthesisUtterance()
-  utter.text = String($(IntroduceText).text())
-  console.log(SpeechSynthesisUtterance.lang)
-  synth.addEventListener('voiceschanged', () => {
-    console.log(synth.getVoices())
-    utter.voice = synth.getVoices()[1]
-  })
-  const play = () => synth.speak(utter)
+  $( document ).ready(function(){
+    
+    $(".soundplayer").click(function(){
+      if({{ key }} == 1){
+        var player = $("#sortTerm")[0];
+        player.pause()
+        player.play();
+      }
+      else if({{ key }} == 3){
+        var player = $("#Orientation")[0];
+        player.pause()
+        player.play();
+      }
+      else if({{ key }} == 2){
+        var player = $("#attention")[0];
+        player.pause()
+        player.play();
+      }
+    });
+  });
 
 </script>
 {% endblock %}
@@ -285,12 +296,24 @@ transform: translateY(4px);
 <h2>歡迎遊玩{{ game_data.title }}!<br><p>以下是本遊戲的玩法介紹:</p></h2>
 <div style="margin:100px;text-align:center">
   {% if game_data.title == "注意力遊戲"%}
+    <audio controls autoplay style="visibility:hidden" id="attention">
+      <source src="/media/music/attention.mp3" type="audio/mpeg">
+    </audio>
     <div style="font-size:300%;" id="IntroduceText"> 
       此音頻當中出現異音時，請<span style="color:red"><b>馬上</b></span>按下<span class="attentionBtn">錯誤</span>按鈕
       (每回只能夠點擊三次)
     </div>
+    
+  {% elif game_data.title == "短期記憶遊戲"%}
+    <p style="font-size:300%;" id="IntroduceText">{{ game_data.text }}</p>
+    <audio controls autoplay style="visibility:hidden" id="sortTerm">
+      <source src="/media/music/sortTerm.mp3" type="audio/mpeg">
+    </audio>
   {% else %}
     <p style="font-size:300%;" id="IntroduceText">{{ game_data.text }}</p>
+    <audio controls autoplay style="visibility:hidden" id="Orientation">
+      <source src="/media/music/Orientation.mp3" type="audio/mpeg">
+    </audio>
   {% endif %}
 </div>
 
@@ -298,7 +321,7 @@ transform: translateY(4px);
 
 <ul class="nav nav-pills nav-fill" style="margin:50px;text-align:center">
   <li class="nav-item">
-    <button class="soundplayer"><i class="fas fa-assistive-listening-systems " onclick="play()">播放</i></button>
+    <button class="soundplayer"><i class="fas fa-assistive-listening-systems " >播放</i></button>
   </li>
   <li class="nav-item">&nbsp;</li>
   <li class="nav-item">

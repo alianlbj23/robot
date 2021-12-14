@@ -300,13 +300,17 @@ def introduction(request, pk, gameName):
     ans_register.clear()
     timer_register.clear()
     play_time_star.clear()
+    key = 0
     game_data = game.objects.get(title = gameName)
     if gameName == "短期記憶遊戲":
         title = "SortTermMemoryGame"
+        key = 1
     if gameName == "注意力遊戲":
         title = "AttentionGame"
+        key = 2
     if gameName == "定向力遊戲":
         title = "OrientationGame"
+        key = 3
     n = 0
     return render(request, 'introduction.html', locals())
 
