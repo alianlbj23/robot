@@ -68,23 +68,23 @@ def index(request, pk):
 def login(request):
     userdatas = Userdata.objects.all()
 
-    #管理者刪除檔案
-    if request.is_ajax():
-        dataPk = int(request.GET.get("dataPk"))
-        deleteData = Userdata.objects.filter(pk=dataPk)
-        #path = str(pathlib.Path(__file__).parent.absolute())
-        path = str(os.getcwd()) + "\\media\\headshot\\"
-        
-        #dirlist = os.listdir(path)
-        deleteDataUrl = list(deleteData.values('image'))[0]['image']
-        deleteDataUrl = str(deleteDataUrl).split("headshot/")[1]
-        deleteDataUrl = path + str(deleteDataUrl)
-        print(deleteDataUrl)
-        try:#不知為啥，圖片刪掉，網頁還能輸出圖片
-            os.remove(deleteDataUrl)
-        except:
-            pass
-        deleteData.delete()
+#管理者刪除檔案
+# if request.is_ajax():
+#     dataPk = int(request.GET.get("dataPk"))
+#     deleteData = Userdata.objects.filter(pk=dataPk)
+#     #path = str(pathlib.Path(__file__).parent.absolute())
+#     path = str(os.getcwd()) + "\\media\\headshot\\"
+    
+#     #dirlist = os.listdir(path)
+#     deleteDataUrl = list(deleteData.values('image'))[0]['image']
+#     deleteDataUrl = str(deleteDataUrl).split("headshot/")[1]
+#     deleteDataUrl = path + str(deleteDataUrl)
+#     print(deleteDataUrl)
+#     try:#不知為啥，圖片刪掉，網頁還能輸出圖片
+#         os.remove(deleteDataUrl)
+#     except:
+#         pass
+#     deleteData.delete()
     return render(request, 'Login.html', locals())
 
 def logout(request):
@@ -300,13 +300,17 @@ def introduction(request, pk, gameName):
     ans_register.clear()
     timer_register.clear()
     play_time_star.clear()
+    key = 0
     game_data = game.objects.get(title = gameName)
     if gameName == "短期記憶遊戲":
         title = "SortTermMemoryGame"
+        key = 1
     if gameName == "注意力遊戲":
         title = "AttentionGame"
+        key = 2
     if gameName == "定向力遊戲":
         title = "OrientationGame"
+        key = 3
     n = 0
     return render(request, 'introduction.html', locals())
 

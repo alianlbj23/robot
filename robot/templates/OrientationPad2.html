@@ -266,8 +266,11 @@
 {% endblock %}
 {% block content %}
 <h2>歡迎遊玩定向力遊戲(平板模式)!</h2>
+<audio controls autoplay style="visibility:hidden" id="Orientation2">
+    <source src="/media/music/Orientation2.mp3" type="audio/mpeg">
+</audio>
 <h3>
-    <div style="font-size:150%;" id="IntroduceText"> 遊戲提示:請將上方的4個色塊正確填入下方4個區塊</div>
+    <div style="font-size:150%;" id="IntroduceText"> 遊戲提示:請依照這個順序，將色塊移動到下方</div>
 </h3>
 <div class="wrapper0">
     {% for color in randomColor %}

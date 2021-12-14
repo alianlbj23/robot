@@ -22,7 +22,8 @@
             clearInterval(timer2);
             $("#countdown2").css("display", 'none');
             $("#readybtn").css("display", "").addClass("fadein")
-            
+            var player = $("#sortTerm2")[0];
+            player.play();
         }, 5000);//讓三張圖片出現五秒
         $("#readybtn").click(function(){
             $(".after").removeClass("after").addClass("fadein")
@@ -264,8 +265,12 @@
             <div class="col-9 col-md-4 first image-1x1" ><img  src="{{pic3_first}}" id="pic3"></div>
         </div>
         <div id="readybtn" style="display:none">
+            
         <button class="prepareButton" >準備好了</button>
         <p style="font-size:300%;" >請選出剛剛出現的那三張圖片</p>
+        <audio style="visibility:hidden" id="sortTerm2">
+            <source src="/media/music/sortTerm2.mp3" type="audio/mpeg">
+        </audio>
         </div>
         <div class="row">   
             {% for pic_change in pic_change_total %}
