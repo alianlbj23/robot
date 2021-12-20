@@ -1,7 +1,6 @@
-
 {% extends "base.html" %}
-{% block title %}歷史回顧{% endblock %}
-{% block css%}
+{% block title %}圖表輸出{% endblock %}
+{% block css %}
 <style>
     .v13_58 {
         color: rgba(0, 0, 0, 1);
@@ -11,58 +10,7 @@
         opacity: 1;
         top: 0px;
         left:3px;
-    }
-    .memoryBtn{
-        width: 350px;
-        height: 50px;
-        display: block;
-        text-align: center;
-        cursor: pointer;
-        line-height: 40px;
-        color: 	#64A600;
-        background-color: transparent;
-        border: 1px solid 	#64A600;
-        transition: all .3s linear;
-        font: bold  normal normal 35px arial;
-    }
-    .memoryBtn:hover{
-        background-color: 	#64A600;
-        color: #fff;
-    }
-    .OrientationBtn{
-        width: 350px;
-        height: 50px;
-        display: block;
-        text-align: center;
-        cursor: pointer;
-        line-height: 40px;
-        color: 	#C6A300;
-        background-color: transparent;
-        border: 1px solid 	#C6A300;
-        transition: all .3s linear;
-        font: bold  normal normal 35px arial;
-    }
-    .OrientationBtn:hover{
-        background-color: 	#C6A300;
-        color: #fff;
-    }
-    .AttentionBtn{
-        width: 350px;
-        height: 50px;
-        display: block;
-        text-align: center;
-        cursor: pointer;
-        line-height: 40px;
-        color: 	#AE0000;
-        background-color: transparent;
-        border: 1px solid 	#AE0000;
-        transition: all .3s linear;
-        font: bold  normal normal 35px arial;
-        
-    }
-    .AttentionBtn:hover{
-        background-color: 	#AE0000;
-        color: #fff;
+        color:orange;
     }
     .button5 {
         display: inline-block;
@@ -121,43 +69,83 @@
         background: url("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABgAAAAYCAYAAADgdz34AAAACXBIWXMAAA7EAAAOxAGVKw4bAAABh0lEQVRIibXVMUhVYRQH8B/Pi4i8wUlERB4RTRIi4uAQDg4i4vhoampoCJEIaWpxEJKmMBAFRxERcVEcIlpaREJEQyIkRIJw0D2k4dwH+VDve3rff/vu933nf87//L9zuRnJLXv3xiPMNSp4H35jO49ghar1MNaxiFZ0oXjNuTuhjGMMoBe7OMIpvmMpPVO8S/CX+CG0r0YLHuAZ1lLC9+ioJ/gpOms8347p9M5rNGdd6MAOZtSndRc28LmW5NrwCQvC/+14inH0u1n3Al4JeR9mkTRjJc1qBCdYxhdh2z3MCgNUV1rGT5SySBLxwE5cfQcJejCF/ZR0uOruc+G8TJcV8BZbtyQxhm9YFXJWMI8PWQQV9GXsJ3gjpBlMvxVFPwZqJakFQ/iF0XRdFobJFY9TkidC4gPhvlwxKEZNNybV0Yt6MCHMURK9SHKZkv/ho2h0P/6iuylngksxgd+JCfwn7wrgK87FBC7lXUEFl3iBnUZUAJuiB/n8Cq/BGQ5x0SiJ4AK7/wCn8UdE6vGrrAAAAABJRU5ErkJggg==") no-repeat left center transparent;
         background-size: 100% 100%;
     }
-    a{ text-decoration:none} 
-    a:hover{ text-decoration:none}
+    .yearTitle{
+        font-family: Roboto;
+        color:orange;
+    }
 </style>
 {% endblock %}
-
 {% block content %}
-
 <nav class="navbar navbar-expand-md" style="border-bottom:solid 20px;border-color:#00BB00;margin-top:20px;margin-bottom:20px;">
     <div class="navbar-collapse collapse w-100 order-1 order-md-0 dual-collapse2">
         <ul class="navbar-nav mr-auto">
             <li class="nav-item active">
-                <span class="v13_58" ><img src="/media/image/scroll.png" width="60" height="60">歷史資料</span>
+                <span class="v13_58" ><img src="/media/image/scroll.png" width="60" height="60">{{title}}</span>
             </li>
+        
         </ul>
+        
+        
     </div>
 
     <div class="navbar-collapse collapse w-100 order-3 dual-collapse2">
         <ul class="navbar-nav ml-auto">
             <li class="nav-item">
-        <a href="/index/{{ pk }}"><button  class="button5">&nbsp;&nbsp;回個人畫面</button></a>
-    </li>
+        <a href="/historyMonth/{{pk}}/{{gameName}}/{{year}}/"><button  class="button5">&nbsp;&nbsp;上一頁</button></a>
+            </li>
         </ul>
     </div>
 </nav>
 
-<div style="margin:10px;text-align:center;">
-    <p style="font-size:200%">點擊遊戲圖式<br>即可查詢該遊戲遊玩歷史紀錄</p>
-    <a href="/historyYear/{{ pk }}/SortTermMemoryGame/"><div class="memoryBtn" style="margin:10px;margin:auto">短期記憶遊戲</div></a>
-    <br>
-    <a href="/historyYear/{{ pk }}/OrientationGame/"><div class="OrientationBtn" style="margin:10px;margin:auto">定向力遊戲</div></a>
-    <br>
-    <a href="/historyYear/{{ pk }}/AttentionGame/"><div class="AttentionBtn" style="margin:10px;margin:auto">注意力遊戲</div></a>
-</div>
-
-{% endblock %}
-
-{% block javascript %} 
+{% if totalNumber != 0 %}
+<canvas id="myChart" width="-10%" height="-10%"></canvas>
 <script>
+const ctx = document.getElementById('myChart').getContext('2d');
+const myChart = new Chart(ctx, {
+    type: 'line',
+    data: {
+        labels: [
+            {% for data in totalData %}
+                '{{data.add_time|date:"H:i"}}',
+            {% endfor %}
+        ],
+        datasets: [{
+            label: '得分',
+            data: [
+                {% for data in totalData %}
+                    {{data.correct_rate}},
+                {% endfor %}
+            ],
+            backgroundColor: [
+                'rgba(255, 99, 132, 0.2)',
+                'rgba(54, 162, 235, 0.2)',
+                'rgba(255, 206, 86, 0.2)',
+                'rgba(75, 192, 192, 0.2)',
+                'rgba(153, 102, 255, 0.2)',
+                'rgba(255, 159, 64, 0.2)'
+            ],
+            borderColor: [
+                'rgba(255, 99, 132, 1)',
+                'rgba(54, 162, 235, 1)',
+                'rgba(255, 206, 86, 1)',
+                'rgba(75, 192, 192, 1)',
+                'rgba(153, 102, 255, 1)',
+                'rgba(255, 159, 64, 1)'
+            ],
+            borderWidth: 1
+        }]
+    },
+    options: {
+        scales: {
+            y: {
+                beginAtZero: true
+            }
+        }
+    }
+});
 </script>
+{% else %}
+<p>無資料</p>
+{% endif %}
+
 {% endblock %}

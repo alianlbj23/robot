@@ -9,6 +9,7 @@ from robot import models, forms
 from django.shortcuts import redirect
 from .models import *
 import pandas as pd
+
 from django.contrib import messages
 from .forms import SignupForm
 from django.core.files.storage import FileSystemStorage
@@ -68,23 +69,23 @@ def index(request, pk):
 def login(request):
     userdatas = Userdata.objects.all()
 
-#管理者刪除檔案
-# if request.is_ajax():
-#     dataPk = int(request.GET.get("dataPk"))
-#     deleteData = Userdata.objects.filter(pk=dataPk)
-#     #path = str(pathlib.Path(__file__).parent.absolute())
-#     path = str(os.getcwd()) + "\\media\\headshot\\"
-    
-#     #dirlist = os.listdir(path)
-#     deleteDataUrl = list(deleteData.values('image'))[0]['image']
-#     deleteDataUrl = str(deleteDataUrl).split("headshot/")[1]
-#     deleteDataUrl = path + str(deleteDataUrl)
-#     print(deleteDataUrl)
-#     try:#不知為啥，圖片刪掉，網頁還能輸出圖片
-#         os.remove(deleteDataUrl)
-#     except:
-#         pass
-#     deleteData.delete()
+    #管理者刪除檔案
+    if request.headers.get('x-requested-with') == 'XMLHttpRequest':
+        dataPk = int(request.GET.get("dataPk"))
+        deleteData = Userdata.objects.filter(pk=dataPk)
+        #path = str(pathlib.Path(__file__).parent.absolute())
+        path = str(os.getcwd()) + "\\media\\headshot\\"
+        
+        #dirlist = os.listdir(path)
+        deleteDataUrl = list(deleteData.values('image'))[0]['image']
+        deleteDataUrl = str(deleteDataUrl).split("headshot/")[1]
+        deleteDataUrl = path + str(deleteDataUrl)
+        print(deleteDataUrl)
+        try:#不知為啥，圖片刪掉，網頁還能輸出圖片
+            os.remove(deleteDataUrl)
+        except:
+            pass
+        deleteData.delete()
     return render(request, 'Login.html', locals())
 
 def logout(request):
@@ -195,7 +196,7 @@ def sort_term_memory_ajax(request, pk):
     c_total = list()
     key = 0
     
-    if request.is_ajax():
+    if request.headers.get('x-requested-with') == 'XMLHttpRequest':
         score = 0
         answer1 = request.GET.get('answer1')
         answer2 = request.GET.get('answer2')
@@ -242,7 +243,7 @@ def AttentionGame(request, pk, n, gameName):
     return render(request, 'attention2.html',locals())
 
 def AttentionGameAjax(request, pk):
-    if request.is_ajax():
+    if request.headers.get('x-requested-with') == 'XMLHttpRequest':
         ans1 = int(request.GET.get("ans1"))
         ans2 = int(request.GET.get("ans2"))
         ans3 = int(request.GET.get("ans3"))
@@ -327,7 +328,7 @@ def OrientationGame(request, pk, n, gameName):
 
 def OrientationAjax(request, pk):
     
-    if request.is_ajax():
+    if request.headers.get('x-requested-with') == 'XMLHttpRequest':
         correct = int(request.GET.get("correct"))
         costtime = int(request.GET.get("count_number"))
         userdata = Userdata.objects.get(pk=pk)
@@ -361,35 +362,60 @@ def OrientationPadGame(request, pk, n, gameName):
 def historyEnterPage(request, pk):
     return render(request, 'historyEnterPage.html', locals())
 
-#gameMod丟英文
-def historData(request, pk, gameMod):
-    userdata = Userdata.objects.get(pk=pk)
-    
-    returnkey = 0
-    try:
-        gameModData = GameMod.objects.get(username=userdata, game_mod=gameMod)
-        if gameMod == "SortTermMemoryGame":
-            choice = Sort_term_memory.objects.filter(mod=gameModData)
-        if gameMod == "AttentionGame":
-            choice = Attention.objects.filter(mod=gameModData)
-        if gameMod == "OrientationGame":
-            choice = Orientation.objects.filter(mod=gameModData)
-        p = Paginator(choice, 10) #每20個分頁
-        page_num = request.GET.get('page', 1)
-        try:
-            page = p.page(page_num)
-        except PageNotAnInteger:
-            page = p.page(1)
-        except EmptyPage:
-            page = p.page(p.num_pages)
-        end_page = p.num_pages
-        numbers = len(choice)  
-            
-    except:
-        returnkey = 1
-        pass
+from datetime import datetime
+import time
+def historyYear(request, pk, gameName):
+    YearNow = int(time.strftime('%Y', time.localtime()))
+    yearList = list(range(2021,YearNow+1))
+    return render(request, 'historyYear.html', locals())
 
+def historyMonth(requset, pk, gameName, year):
+    monthList = list(range(1, 13))
+    return render(requset, 'historyMonth.html', locals())
+
+import calendar
+def historyDay(request, pk, gameName, year, month):
+    monthList = list(range(1, 13))
+    day = calendar.monthrange(int(year), int(month))
+    day = int(day[1])
+    dayList = list(range(1,day+1))
+    return render(request, 'historyDay.html', locals())
+
+from datetime import date
+def historyChart(request, pk, gameName, year, month, day):
+    userdata = Userdata.objects.get(pk=pk)
+    gamemode = GameMod.objects.get(username=userdata,game_mod=gameName)
+    if gameName == "SortTermMemoryGame":
+        key = 1
+    if gameName == "AttentionGame":
+        key = 2
+    if gameName == "OrientationGame":
+        key = 3
+    if year!=0 and month!=0 and day!=0:#要找某天的
+        title = str(year)+"年"+str(month)+"月"+str(day)+"日"
+        if key == 1:
+            totalData = Sort_term_memory.objects.filter(mod=gamemode)
+            totalData = totalData.filter(add_time__month=month,add_time__day=day).order_by("add_time")
+        elif key == 2:
+            totalData = Attention.objects.filter(mod=gamemode)
+            totalData = totalData.filter(add_time__month=month,add_time__day=day).order_by("add_time")
+        elif key == 3:
+            totalData = Orientation.objects.filter(mod=gamemode)
+            totalData = totalData.filter(add_time__month=month,add_time__day=day).order_by("add_time")
+
+    elif year != 0 and month != 0 and day == 0:
+        title = str(year)+"年"+str(month)+"月"
+        if key == 1:
+            totalData = Sort_term_memory.objects.filter(mod=gamemode)
+            totalData = totalData.filter(add_time__month=month).order_by("add_time")
+        elif key == 2:
+            totalData = Attention.objects.filter(mod=gamemode)
+            totalData = totalData.filter(add_time__month=month).order_by("add_time")
+        elif key == 3:
+            totalData = Orientation.objects.filter(mod=gamemode)
+            totalData = totalData.filter(add_time__month=month).order_by("add_time")
+    totalNumber = totalData.count()
     
     
-    return render(request, 'historyData.html', locals())
+    return render(request, 'historyChart.html', locals())
 
